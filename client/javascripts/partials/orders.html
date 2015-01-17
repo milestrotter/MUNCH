@@ -1,0 +1,70 @@
+<!-- Ulysses Lin 1/15/2015 -->
+<div ng-controller="Order">
+	<h2>Orders</h2>
+	<p>Create new order:</p>
+	<table class="nestled">
+		<tr>
+			<!-- Use 'name.name' in each 'name' found in 'names' -->
+			<!-- Set default name to first person's name -->
+			<!-- ng-model 'person' links with 'name' in ng-options -->
+			<td>Customer</td>
+			<!-- NOTE: This ought to set the default to the first name...but it's not working -->
+			<td><select ng-model="person" ng-options="name.name for name in names"></select> <span class="neon"> {{person.name}}</span></td>
+		</tr>
+		<tr>
+			<td>Quantity</td>
+			<td><select ng-init="quantity=1" ng-model="quantity" ng-options="quantity for quantity in [1,2,3,4,5]"></select> <span class="neon"> {{quantity}}</span></td>
+		</tr>
+		<tr>
+			<!-- Show the 'item_name' for every 'item' in 'items' -->
+			<td>Item</td>
+			<td><select ng-init="item=items[0]" ng-model="item" ng-options="item.item_name for item in items"></select> <span class="neon"> {{item.item_name}}</span></td>
+		</tr>
+		<tr>
+			<td></td>
+			<!-- Calls on 'makeNewOrder' in Angular controller; sends in 3 arguments -->
+			<td><button ng-click="makeNewOrder(person.name,quantity,item.item_name)">Order</button></td>
+		</tr>
+	</table>
+	<div class="nestled">
+		<!-- Displays validation errors when entering in new item -->
+		<div ng-controller="Wrong">
+			<p class="red">{{item_wrong.message}}</p>
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td>Search existing customers:</td>
+					<td><input type="text" ng-model="search_name"><span class="neon"> {{search_name}}</span></td>
+				</tr>
+				<tr>
+					<td>Enter new item:</td>
+					<td>
+						<input type="text" placeholder="item" ng-model="new_item">
+						<!-- Calls on 'makeNewItem' in Angular controller; sends in previous line's entry -->
+						<button ng-click="makeNewItem(new_item)">Add</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- Displays all orders information -->
+	<table>
+		<thead>
+			<tr>
+				<th>Item</th>
+				<th>Total Ordered</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="order in orders | filter:search_name | orderBy:'name'">
+				<td>{{order.name}}</td>
+				<td>{{order.item}}</td>
+				<td>{{order.quantity}}</td>
+				<td>{{order.date | date:"M/dd/yyyy 'at' h:mma"}}</td>
+				<!-- Calls on 'removeOrder' in Angular controller; sends in entire 'order' object for that particular order  -->
+				<td><button ng-click="removeOrder(order)">Remove</button></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

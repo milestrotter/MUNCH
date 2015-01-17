@@ -1,0 +1,42 @@
+<!-- Ulysses Lin 1/15/2015 -->
+<div ng-controller="Customer">
+	<h2>Customers</h2>
+	<div ng-controller="Wrong">
+		<p class="red">{{customer_wrong.message}}</p>
+	</div>
+	<!-- Search and Make new customer -->
+	<table>
+		<tbody>
+			<tr>
+				<td>Search:</td>
+				<td><input type="text" ng-model="search_name"><span class="neon">{{search_name}}</span></td>
+			</tr>
+			<tr>
+				<td>Make new customer:</td>
+				<td>
+					<input type="text" placeholder="Name" ng-model="new_customer">
+					<!-- Calls upon 'makeNewCustomer',sending in new customer's name -->
+					<button ng-click="makeNewCustomer(new_customer)">Add</button><span class="neon"> {{new_customer}}</span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- List of customers -->
+	<table>
+		<thead>
+			<tr>
+				<th>Customer Name</th>
+				<th>Created Date</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- Shows all customer names -->
+			<tr ng-repeat="name in names | filter:search_name | orderBy:'name'">
+				<td>{{name.name}}</td>
+				<td>{{name.date | date:"M/dd/yyyy 'at' h:mma"}}</td>
+				<td><button ng-click="removeCustomer(name)">Remove</button></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

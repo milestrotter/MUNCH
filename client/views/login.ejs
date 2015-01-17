@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!-- Ulysses Lin 1/15/2015 -->
+<!-- Home page -->
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
+    <script type="text/javascript" src="../javascripts/app.js"></script>
+    <script type="text/javascript" src="../javascripts/factories/factories.js"></script>
+    <script type="text/javascript" src="../javascripts/controllers/controllers.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        //Socket stuff...not necessary for ministore assignment
+        var io = io.connect();
+        io.emit('client_ready');
+        io.on('info', function(msg) {
+            console.log("Received 'info' event as well as the following message:", msg);
+        });
+        $(document).ready(function(){
+            var random_num=Math.floor(Math.random()*3);
+            if(random_num==0){
+                $('body').css('background-image','url(../imgs/login_bg_img_1.jpg)');
+            }else if(random_num==1){
+                $('body').css('background-image','url(../imgs/login_bg_img_2.jpg)');
+            }else if(random_num==2){
+                $('body').css('background-image','url(../imgs/login_bg_img_3.jpg)');
+            }
+        });
+        $(document).on('click','#go_to_register',function(){
+            $('#go_to_register').toggle();
+            $('#login_intro_left_loginbar').toggle();
+            $('#login_intro_left h3').html('Choose an account type:');
+            $('#cancel').toggle();
+            $('#login_intro_left').animate({paddingTop:'0px'},300);
+            $('#login_main').animate({'top':'230px'},300);
+            $('.login_main_tabs').css('cursor','pointer');
+            $('.login_main_tabs').css('border','solid RGB(127,226,46) 2px');
+            $(document).on('mouseenter','.login_main_tabs',function(){
+                var orig_bg_opacity=$(this).css('background-color');
+                $(this).css('background-color',orig_bg_opacity.slice(0,-4)+'0.8)');
+                $(this).mouseleave(function(){
+                    $(this).css('background-color',orig_bg_opacity.slice(0,-4)+'0.2)');
+                });
+            });
+            $(document).one('click','.login_main_tabs',function(){
+                $('.login_main_tabs').css('cursor','auto');
+                $(document).off('mouseenter','.login_main_tabs');
+                $(document).off('mouseenter','.login_main_tabs');
+                $(this).siblings().toggle(300);
+                $('#registration_form').show();
+                $('#registration_form').css('display','inline-block');
+            });
+        });
+        $(document).on('click','#cancel',function(){
+            $('#cancel').toggle();
+            $('#login_intro_left_loginbar').toggle();
+            $('.login_main_tabs').off('click');
+            $('.login_main_tabs').off('mouseenter');
+            $('.login_main_tabs').show();
+            $('#registration_form').hide();
+            $('.login_main_tabs').css('cursor','auto');
+            $('.login_main_tabs').css('border','none');
+            $('#login_intro_left h3').html('Or Register:');
+            $('#go_to_register').toggle();
+            $('#login_intro_left').animate({'padding-top':'100px'},300);
+            $('#login_main').animate({'top':'450px'},300);
+        });
+    </script>
+</head>
+<body ng-app="munch">
+    <div id="top_links">
+        <a href="#/info" class="no_decoration">Info</a>
+    </div>
+    
+    <div id="login_intro_left" class="nestled" ng-controller="LoginIntro">
+        <div id="login_intro_left_title">
+            <h1><%= title %></h1>
+            <h6>We can all fit at the dinner table. 
+                <span class="neon_green"><a href="#/learn_more">Learn More-></a></span>
+            </h6>
+        </div>
+        <div id="login_intro_left_loginbar">
+            <input type="text" class="nestled" ng-model="login_info.username" placeholder="username">
+            <input type="text" class="nestled" ng-model="login_info.password" placeholder="password">
+            <button class="nestled" ng-click="login()">Log In</button><br>
+            
+        </div>
+        <div>
+            <h3 class="nestled">Or Register: </h3>
+            <button id="go_to_register" class="nestled neon_green_bg"><span class="bold">Go to Registration</span></button>
+            <button id="cancel" class="hidden nestled neon_green_bg"><span class="bold">Cancel</span></button>
+        </div>
+    </div>
+    
+    <div id="login_intro_right" class="nestled">
+<!-- LOAD PARTIALS HERE -->
+        <div ng-view=""></div>
+    </div>
+
+    <div id="login_main">
+        <div id="login_main_hosts" class="login_main_tabs nestled">
+            <h2>HOSTS</h2>
+            <div class="login_main_tabs_content">
+                <ul>
+                    <li>Check table availability</li>
+                    <li>Reserve tables</li>
+                    <li>Track order completion and cook time</li>
+                    <li>Prioritize orders</li>
+                </ul>
+            </div>
+            <div class="login_main_tabs_imgwrapper">
+            </div>
+        </div>
+        <div id="login_main_personal" class="login_main_tabs nestled">
+            <h2>PERSONAL</h2>
+            <div class="login_main_tabs_content">
+                <ul>
+                    <li>Check your schedule</li>
+                    <li>Request shift changes and send messages</li>
+                    <li>Calculate your tips and earnings over time</li>
+                    <li>Check your paystubs</li>
+                </ul>
+                <div class="login_main_tabs_imgwrapper">
+                </div>
+            </div>
+        </div>
+        <div id="login_main_mgmt" class="login_main_tabs nestled">
+            <h2>MGMT</h2>
+            <div class="login_main_tabs_content">
+                <ul>
+                    <li>Manage shift change requests</li>
+                    <li>Monitor employee hours</li>
+                    <li>Track inventory</li>
+                    <li>Alter the menu</li>
+                </ul>
+                <div class="login_main_tabs_imgwrapper">
+                </div>
+            </div>
+        </div>
+        <div id="registration_form" class="hidden nestled">
+            <div id="registration_errors">
+                <p class="red"></p>
+            </div>
+            <p>Please fill out the following required fields.</p>
+            <input type="text" ng-model="new_user_firstname" placeholder="first name" autofocus><br>
+            <input type="text" ng-model="new_user_lastname" placeholder="last name"><br>
+            <input type="text" ng-model="new_user_username" placeholder="username"><br>
+            <input type="text" ng-model="new_user_email" placeholder="email"><br>
+            <input type="text" ng-model="new_user_phone" placeholder="phone"><br>
+            <input type="text" ng-model="new_user_password" placeholder="password"><br>
+            <input type="text" ng-model="new_user_passwordconfirm" placeholder="confirmation"><br>
+            <button id="register">Register!</button>
+        </div>
+    </div>
+</body>
+</html>
