@@ -6,112 +6,113 @@ munch.factory('CustomerFactory',function($http){
 	var names=[];
 	//Initialize Angular (client side) version of 'orders'
 	var orders=[];
-	//Intialize existing item types
-	//NOTE: item types not stored in db...sorry :(
-	var tally=[
-		{item_name:'Nike shoes'},
-		{item_name:'Black belts'},
-		{item_name:'Ice cream cones'},
-		{item_name:'Candles'}
-	];
-	//Error(s) for new item entry
-	var item_error={message:''};
-	//Error(s) for new customer (person name) entry
-	var customer_error={message:''};
-	//Create factory object
+
+	var login_error={message:''};
+
+	var registration_errors=[];
+
+	var registration_success={status:false};
+
+	var users=[];
+
+	//Need to empty username if you want the login stuff to be empty...
+	var logged_in_user={username:'Mac Swanson'};
+
+	var account_type='';
+
+	var dashboard_messages=[];
+
+	//CHANGE THIS WITH DB
+	var dashboard_specials=[];
+
+
 	var factory={};
 
-//----------ITEMS----------
-	factory.getItems=function(){
-		return tally;
+//----------New----------
+	factory.getLoginError=function(){
+		return login_error;
 	}
-	factory.getItemError=function(){
-		return item_error;
-	}
-	//Adds a new item type
-	factory.makeNewItem=function(new_item){
-		//Throw error if entry is blank
-		if(typeof new_item=='undefined'){
-			item_error.message='Please enter a valid name!';
-			return false;
-		}
-		//Throw error if item type exists
-		for(item in tally){
-			if(tally[item].item_name==new_item){
-				item_error.message='That name is already in the list!';
-				return false;
+	factory.login=function(login_info,callback){
+		//VALIDATION
+		$http.post('/login',login_info).success(function(output){
+			if(typeof output=='string'){
+				login_error=output;
+			}else{
+				logged_in_user=output;
 			}
+			callback(logged_in_user);
+		});
+		return logged_in_user;
+	}
+	factory.getLoggedInUser=function(){
+		console.log('getLoggedInUser',logged_in_user.username.length);
+		return logged_in_user;
+	}
+	factory.makeNewUser=function(new_user){
+		registration_errors.length=0;
+		var atpos=new_user.email.indexOf('@');
+		var dotpos=new_user.email.lastIndexOf('.');
+		if(atpos<1 || dotpos<atpos+2 || dotpos+2>=new_user.email.length){
+			registration_errors.push({message:'Please enter a valid email.'});
 		}
-		item_error.message='';
-		tally.push({item_name:new_item});
-		return true;
+		if(new_user.password!==new_user.passwordconfirm){
+			registration_errors.push({message:'Your passwords do not match.'});
+		}
+		if(registration_errors.length==0){
+			registration_success.status=true;
+			var new_user_info={firstname:new_user.firstname,lastname:new_user.lastname,username:new_user.username.toUpperCase(),email:new_user.email,phone:new_user.phone,password:new_user.password,account_type:account_type};
+			users.push(new_user_info);
+			$http.post('/makeNewUser.json',new_user_info).success(function(output){
+				new_user_info={};
+			});
+			
+		}
+	}
+	factory.getRegistrationErrors=function(){
+		return registration_errors;
+	}
+	factory.getRegistrationSuccess=function(){
+		return registration_success;
+	}
+	factory.redisplayForm=function(){
+		registration_success.status=false;
+	}
+	factory.selectUserType=function(type){
+		account_type=type;
 	}
 
-//----------CUSTOMERS----------
-	factory.compileCustomers=function(callback){
-		$http.get('/getCustomers.json').success(function(output){
-			names=output;
-			callback(names);
-		});
-		return names;
-	}
-	factory.getNames=function(){
-		return names;
-	}
-	factory.getCustomerError=function(){
-		return customer_error;
-	}
-	//Makes a new customer name
-	factory.makeNewCustomer=function(entered_name){
-		//Throw error if entry is blank
-		if(typeof entered_name=='undefined'){
-			customer_error.message='Please enter a valid name!';
-			return false;
+	factory.getNavBar=function(){
+		var to_show={account_type:'personal'};
+		if(to_show.account_type=='team'){
+			return {schedule:false,menu:true,tables:true,kitchen:true,tips:false,inventory:false,personelle:false,settings:true};
 		}
-		//Throw error if item type exists
-		for(person_name in names){
-			if(names[person_name].name==entered_name){
-				customer_error.message='That name is already in the list!';
-				return false;
-			}
+		if(to_show.account_type=='personal'){
+			return {schedule:true,menu:true,tables:false,kitchen:false,tips:true,inventory:false,personelle:false,settings:true};
 		}
-		customer_error.message='';
-		var d=new Date();
-		names.push({name:entered_name,date:d});
-		$http.post('/makeNewCustomer.json',{name:entered_name,date:d}).success(function(output){
-		});
+		if(to_show.account_type=='mgmt'){
+			return {schedule:false,menu:true,tables:false,kitchen:false,tips:false,inventory:true,personelle:true,settings:true};
+		}
 	}
-	//Finds 'customer' object in data; deletes from data
-	factory.removeCustomer=function(to_delete){
-		names.splice(names.indexOf(to_delete),1);
-		$http.post('/removeCustomer.json',to_delete).success(function(output){
+	// factory.getDashboardMessages=function(){
+	// 	return dashboard_messages;
+	// }
+	factory.getDashboardMessages=function(callback){
+		$http.get('/getDashboardMessages.json').success(function(output){
+			dashboard_messages=output;
+			callback(dashboard_messages);
 		});
+		return dashboard_messages;
+	}
+	factory.getDashboardSpecials=function(callback){
+		console.log('getDashboardSpecials');
+		$http.get('/getDashboardSpecials.json').success(function(output){
+			dashboard_specials=output;
+			callback(dashboard_specials);
+		});
+		return dashboard_specials;
 	}
 
-//----------ORDERS----------
-	//Grabs orders from 'orders' collection/db
-	factory.getOrders=function(callback){
-		$http.get('/getOrders.json').success(function(output){
-			orders=output;
-			//Callback needed since controller's $scope runs first;
-			//that means that assigning $scope in here would give it 'undefined' as output :(
-			callback(orders);
-		});
-		return orders;
-	}
-	//Creates a new order
-	factory.makeNewOrder=function(name,quantity,item){
-		var d=new Date();
-		orders.push({name:name,item:item,quantity:quantity,date:d});
-		$http.post('/makeNewOrder.json',{name:name,item:item,quantity:quantity,date:d}).success(function(output){
-		});
-	}
-	//Finds 'order' object in data; deletes from data
-	factory.removeOrder=function(to_delete){
-		orders.splice(orders.indexOf(to_delete),1);
-		$http.post('/removeOrder.json',to_delete).success(function(output){
-		});
-	}
+
 
 	return factory;
 });

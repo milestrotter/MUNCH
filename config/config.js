@@ -16,7 +16,7 @@ var notifier = {
 
 module.exports = {
     development: {
-        db: 'mongodb://localhost/order',
+        db: 'mongodb://localhost/munch',
         root: rootPath,
         notifier: notifier,
         app: {
@@ -24,7 +24,7 @@ module.exports = {
         }
     },
     test: {
-        db: 'mongodb://localhost/order',
+        db: 'mongodb://localhost/munch',
         root: rootPath,
         notifier: notifier,
         app: {

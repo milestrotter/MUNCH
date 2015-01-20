@@ -1,0 +1,17 @@
+<div id='released'>
+    <h1>Available shifts:</h1>
+    <table class='table'>
+        <thead>
+            <th>Shift</th>
+            <th>Date/Time</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="shift in shifts | orderBy:'name'">
+                <td>{{shift.title}}</td>
+                <td>{{shift.start}}</td>
+                <td><button class='btn btn-success' ng-click="takeShift(shift)">Pickup Shift</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

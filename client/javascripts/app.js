@@ -14,6 +14,10 @@ munch.config(function($routeProvider){
 			{
 				templateUrl:'javascripts/partials/login_info.html'
 			})
+		.when('/tips',
+			{
+				templateUrl:'javascripts/partials/tipGraph.ejs'
+			})
 		.otherwise({
 			redirectTo:'/'
 		});

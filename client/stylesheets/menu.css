@@ -1,0 +1,22 @@
+.footer{
+	width: 100%;
+	background-color: black;
+	height: 50px;
+	position: fixed;
+	left: 0px;
+	bottom: 0px;
+}
+
+.submit{
+	margin: 10px;
+	float: right;
+}
+.logout{
+	margin: 10px;
+}
+li{
+	list-style-type: none;
+}
+textarea{
+	resize: none;
+}

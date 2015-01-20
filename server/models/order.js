@@ -1,11 +1,20 @@
 var mongoose = require('mongoose');
-var d=new Date();
+
 var OrderSchema = new mongoose.Schema({
 	name: String,
-	item: String,
-	quantity: Number,
-	date: {type: Date, default: d }
+	description: String,
+	notes: {
+		priority: Boolean,
+		custom: Boolean,
+		allergy: Boolean,
+		notes: String,
+	},
+	price: String,
+	qty: Number
 });
-OrderSchema.path('name').required(true, 'Order name cannot be blank');
-OrderSchema.path('item').required(true, 'Order item cannot be blank');
+
+// OrderSchema.path('name').required(true, 'Schedule name cannot be blank');
+// OrderSchema.path('description').required(true, 'Description cannot be blank');
+// OrderSchema.path('price').required(true, 'Price cannot be blank');
+
 mongoose.model('Order', OrderSchema);

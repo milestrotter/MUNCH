@@ -4,7 +4,7 @@
 <html>
 <head>
     <title><%= title %></title>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/login_style.css" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
     <script type="text/javascript" src="../javascripts/app.js"></script>
@@ -50,17 +50,18 @@
                 $(document).off('mouseenter','.login_main_tabs');
                 $(document).off('mouseenter','.login_main_tabs');
                 $(this).siblings().toggle(300);
-                $('#registration_form').show();
-                $('#registration_form').css('display','inline-block');
+                $('#registration_form_wrapper').show();
+                $('#registration_form_wrapper').css('display','inline-block');
             });
         });
-        $(document).on('click','#cancel',function(){
+        $(document).on('click','#cancel,#register_done',function(){
+            // $('#registration_form input').removeClass('.ng-dirty');
             $('#cancel').toggle();
             $('#login_intro_left_loginbar').toggle();
             $('.login_main_tabs').off('click');
             $('.login_main_tabs').off('mouseenter');
             $('.login_main_tabs').show();
-            $('#registration_form').hide();
+            $('#registration_form_wrapper').hide();
             $('.login_main_tabs').css('cursor','auto');
             $('.login_main_tabs').css('border','none');
             $('#login_intro_left h3').html('Or Register:');
@@ -70,28 +71,37 @@
         });
     </script>
 </head>
-<body ng-app="munch">
+<body ng-app="munch" ng-controller="Registration">
     <div id="top_links">
         <a href="#/info" class="no_decoration">Info</a>
+
     </div>
     
-    <div id="login_intro_left" class="nestled" ng-controller="LoginIntro">
+    <div id="login_intro_left" class="nestled">
         <div id="login_intro_left_title">
             <h1><%= title %></h1>
             <h6>We can all fit at the dinner table. 
                 <span class="neon_green"><a href="#/learn_more">Learn More-></a></span>
             </h6>
         </div>
-        <div id="login_intro_left_loginbar">
-            <input type="text" class="nestled" ng-model="login_info.username" placeholder="username">
-            <input type="text" class="nestled" ng-model="login_info.password" placeholder="password">
-            <button class="nestled" ng-click="login()">Log In</button><br>
-            
+        <div id="login_intro_left_loginbar" ng-controller="LoginIntro">
+<!-- LOGIN ERROR MESSAGE -->
+            <div id="login_error">
+                <p class="red">{{login_error.message}}</p>
+            </div>
+<!-- LOGIN FORM -->
+            <form id="login_form" name="login_form" ng-submit="login_form.$valid && login(login_info)" novalidate >
+                <input type="text" class="nestled" ng-model="login_info.username" placeholder="username" required>
+                <input type="text" class="nestled" ng-model="login_info.password" placeholder="password" required>
+                <input id="login_form_submit" type="submit" class="nestled" value="Login" ng-hide="logged_in_user.username.length">
+                <button id="go_to_dashboard" ng-click="get()" ng-show="logged_in_user.username.length"><a href="/dashboard" class="no_decoration">GO TO DASHBOARD</a></button>
+            </form>
         </div>
         <div>
-            <h3 class="nestled">Or Register: </h3>
-            <button id="go_to_register" class="nestled neon_green_bg"><span class="bold">Go to Registration</span></button>
-            <button id="cancel" class="hidden nestled neon_green_bg"><span class="bold">Cancel</span></button>
+<!-- LIGHT GREY REGISTER BAR -->
+            <h3 class="nestled">New user?: </h3>
+            <button id="go_to_register" class="nestled neon_green_bg" ng-click="toggle_tab_click()"><span class="bold">Register Here</span></button>
+            <button id="cancel" class="hidden nestled neon_green_bg" ng-click="cancel()"><span class="bold">Cancel</span></button>
         </div>
     </div>
     
@@ -101,8 +111,8 @@
     </div>
 
     <div id="login_main">
-        <div id="login_main_hosts" class="login_main_tabs nestled">
-            <h2>HOSTS</h2>
+        <div id="login_main_hosts" class="login_main_tabs nestled" ng-click="tab_clickable && user_type('team')">
+            <h2>FOR THE WHOLE TEAM</h2>
             <div class="login_main_tabs_content">
                 <ul>
                     <li>Check table availability</li>
@@ -114,8 +124,8 @@
             <div class="login_main_tabs_imgwrapper">
             </div>
         </div>
-        <div id="login_main_personal" class="login_main_tabs nestled">
-            <h2>PERSONAL</h2>
+        <div id="login_main_personal" class="login_main_tabs nestled" ng-click="tab_clickable && user_type('personal')">
+            <h2>FOR YOU</h2>
             <div class="login_main_tabs_content">
                 <ul>
                     <li>Check your schedule</li>
@@ -127,8 +137,8 @@
                 </div>
             </div>
         </div>
-        <div id="login_main_mgmt" class="login_main_tabs nestled">
-            <h2>MGMT</h2>
+        <div id="login_main_mgmt" class="login_main_tabs nestled" ng-click="tab_clickable && user_type('mgmt')">
+            <h2>FOR MANAGEMENT</h2>
             <div class="login_main_tabs_content">
                 <ul>
                     <li>Manage shift change requests</li>
@@ -140,19 +150,57 @@
                 </div>
             </div>
         </div>
-        <div id="registration_form" class="hidden nestled">
-            <div id="registration_errors">
-                <p class="red"></p>
+        <div id="registration_form_wrapper" class="hidden nestled">
+            <div ng-show="!registration_success.status">
+                <div id="registration_errors">
+                    <p class="red" ng-repeat="registration_error in registration_errors">{{registration_error.message}}</p>
+                    <!-- <p class="red">{{registration_errors}}</p> -->
+                </div>
+                <p>Please fill out the following required fields.</p>
+                <form id="registration_form" name="reg_form" ng-submit="reg_form.$valid && makeNewUser(new_user)" novalidate >
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>first name</td>
+                                <td><input type="text" ng-model="new_user.firstname" placeholder="first name" required autofocus></td>
+                            </tr>
+                            <tr>
+                                <td>last name</td>
+                                <td><input type="text" ng-model="new_user.lastname" placeholder="last name" required></td>
+                            </tr>
+                            <tr>
+                                <td>username</td>
+                                <td><input type="text" ng-model="new_user.username" placeholder="username" required></td>
+                            </tr>
+                            <tr>
+                                <td>email</td>
+                                <td><input type="text" ng-model="new_user.email" placeholder="email" name="email" required></td>
+                            </tr>
+                            <tr>
+                                <td>phone</td>
+                                <td><input type="text" ng-model="new_user.phone" placeholder="phone" required></td>
+                            </tr>
+                            <tr>
+                                <td>password</td>
+                                <td><input type="text" ng-model="new_user.password" placeholder="password" required></td>
+                            </tr>
+                            <tr>
+                                <td>confirmation</td>
+                                <td><input type="text" ng-model="new_user.passwordconfirm" placeholder="confirmation" required></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><input id="registration_form_submit" type="submit" value="Register!"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
             </div>
-            <p>Please fill out the following required fields.</p>
-            <input type="text" ng-model="new_user_firstname" placeholder="first name" autofocus><br>
-            <input type="text" ng-model="new_user_lastname" placeholder="last name"><br>
-            <input type="text" ng-model="new_user_username" placeholder="username"><br>
-            <input type="text" ng-model="new_user_email" placeholder="email"><br>
-            <input type="text" ng-model="new_user_phone" placeholder="phone"><br>
-            <input type="text" ng-model="new_user_password" placeholder="password"><br>
-            <input type="text" ng-model="new_user_passwordconfirm" placeholder="confirmation"><br>
-            <button id="register">Register!</button>
+            <div ng-show="registration_success.status">
+                <p>You have successfully registered!</p>
+                <p>Welcome to MUNCH.</p>
+                <button id="register_done" ng-click="redisplayForm()">OK</button>
+            </div>
         </div>
     </div>
 </body>

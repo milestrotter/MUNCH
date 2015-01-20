@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <div ng-app='munch'>
+        <div ng-controller='schedules'>
+            <title><%= title %></title>
+            <link rel="stylesheet" type="text/css" href="/stylesheets/calendarstyle.css" />
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+            <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+            <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+            <link href='../fullcalendar/fullcalendar.css' rel='stylesheet' />
+            <link href='../fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+            <link href='../stylesheets/calendarstyle.css' rel='stylesheet'>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+            <script src='../fullcalendar/lib/moment.min.js'></script>
+            <script src='../fullcalendar/lib/jquery.min.js'></script>
+            <script src='../fullcalendar/fullcalendar.min.js'></script>
+            <script type="text/javascript" src="../javascripts/schedule_app.js"></script>
+            <script type="text/javascript" src="../javascripts/factories/ScheduleFactory.js"></script>
+            <script type="text/javascript" src="../javascripts/controllers/schedules.js"></script>
+            <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+            <script type="text/javascript" src="http://cdn.amcharts.com/lib/3/amcharts.js"></script>
+            <script type="text/javascript" src="http://cdn.amcharts.com/lib/3/serial.js"></script>
+            <script type="text/javascript">
+            
+                date = new Date();
+                $(document).on('click', '#addtipclick', function() {
+                    window.location.href = "http://localhost:6789/schedules"
+                })
+                $(document).on('click', '#tipclick', function() {
+                    tipArray = [];
+                    $('#loopContainer').find('div').each(function() { 
+                        var object =  {"date": $(this).attr('tipdate'), "amount": $(this).attr('tipamount')};
+                        tipArray.push(object);
+                    });
+                    $.ajax({
+                        type: 'GET',
+                        url: './javascripts/controllers/schedules.js',
+                        success: function (data) {
+                            AmCharts.makeChart("chartdiv",
+                            {
+                                "type": "serial",
+                                "pathToImages": "http://cdn.amcharts.com/lib/3/images/",
+                                "categoryField": "date",
+                                "startDuration": 1,
+                                "categoryAxis": {
+                                    "gridPosition": "start"
+                                },
+                                "trendLines": [],
+                                "graphs": [
+                                    {
+                                        "balloonText": "[[value]]",
+                                        "bullet": "round",
+                                        "id": "AmGraph-1",
+                                        "title": "Tip History",
+                                        "type": "smoothedLine",
+                                        "valueField": "amount"
+                                    },
+                                ],
+                                "guides": [],
+                                "valueAxes": [
+                                    {
+                                        "id": "ValueAxis-1",
+                                        "title": "Amount"
+                                    }
+                                ],
+                                "allLabels": [],
+                                "balloon": {},
+                                "legend": {
+                                    "useGraphSettings": true
+                                },
+                                "titles": [
+                                    {
+                                        "id": "Title-1",
+                                        "size": 15,
+                                        "text": "Tips"
+                                    }
+                                ],
+                                "dataProvider": tipArray,
+                            }
+                        );
+
+                            }
+                        })
+                })
+
+    </script>
+
+</head>
+    <body>
+        <div id='loopContainer'>
+            <div id='{{tip._id}}' tipdate='{{tip.date}}' tipamount='{{tip.amount}}' ng-repeat="tip in tips"></div>
+        </div>
+        <div id='notebook'> 
+            <div id='calendar2'></div>
+            <div id='calendar'></div>
+        </div>
+        <a href='#/shifts'>View Open Shifts</a> | <a href='#/tips' id='tipclick'>View Tips</a>
+        <div ng-view=""></div>
+        </div>
+    </body>
+</html>

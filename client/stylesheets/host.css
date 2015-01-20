@@ -1,0 +1,27 @@
+h1{
+	color: white;
+}
+body{
+	background-color: black;
+}
+.tables{
+	height: 150px;
+	width: 250;
+	background-color: #999;
+	display: inline-block;
+	padding: 70 110;
+	font-size: 20px;
+	font-weight: bold;
+	margin: 10px;
+}
+.footer{
+	width: 100%;
+	background-color: black;
+	height: 50px;
+	position: fixed;
+	left: 0px;
+	bottom: 0px;
+}
+.logout{
+	margin: 10px;
+}

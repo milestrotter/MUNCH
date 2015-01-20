@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%= title %></title>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/dashboard_style.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
+    <script type="text/javascript" src="../javascripts/dashboard_app.js"></script>
+    <script type="text/javascript" src="../javascripts/factories/factories.js"></script>
+    <script type="text/javascript" src="../javascripts/controllers/controllers.js"></script>
+<!-- Chris -->
+    <script type="text/javascript" src="../javascripts/controllers/schedules.js"></script>
+    <script type="text/javascript" src="../javascripts/factories/ScheduleFactory.js"></script>
+
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+    	$('.dashboard_navbar_tab').css('opacity','0');
+    	$('.dashboard_navbar_tab').animate({'opacity':'1'},1000);
+    });
+		$(document).on('mouseenter','.dashboard_navbar_tab',function(){
+			$('.dashboard_navbar_tab').css('cursor','pointer');
+			$(this).find('div').animate({'opacity':'0.8'},300);
+			$(this).find('ul').animate({'opacity':'1'},300);
+            $(this).find('h2').css('background-color','transparent');
+            $(this).find('h2').css('color','RGB(255,0,174)');
+            $(this).animate({'background-position-x':'-50px'},500);
+            $(this).mouseleave(function(){
+            	$('.dashboard_navbar_tab *').stop(true,true);
+            	$(this).find('div').css('opacity','0');
+            	$(this).find('ul').animate({'opacity':'0'},300);
+                $(this).find('h2').css('background-color','white');
+                $(this).find('h2').css('color','black');
+                $('.dashboard_navbar_tab').css('background-position-x','0px');
+            });
+        });
+        $(document).on('click','.dashboard_navbar_tab',function(){
+        	$('.dashboard_navbar_tab *').stop(true,true);
+        	$('#empty_box').hide();
+    		$('#dashboard_navbar').css('margin-top','580px');
+    		$('.dashboard_navbar_tab').find('h2').css('top','-740px');
+        });
+        $(document).on('click','#home',function(){
+        	$('#empty_box').show();
+        	$('.dashboard_navbar_tab').find('h2').css('top','-400px');
+        	$('#dashboard_navbar').css('margin-top','0px');
+        });
+    </script>
+</head>
+<body ng-app="munch">
+	<div id="dashboard_navbar" class="nestled" ng-controller="DashboardNavbar">
+		<div>
+			<div id="dashboard_navbar_schedule" class="dashboard_navbar_tab nestled" ng-show="navbar_show.schedule" onclick="location.href='/schedules'">
+				<div></div>
+				<ul>
+					<li>Check your work hours visually</li>
+					<li>Request substitutes</li>
+					<li>Send messages to coworkers</li>
+				</ul>
+				<h2>SCHEDULE</h2>
+			</div>
+			<div id="dashboard_navbar_menu" class="dashboard_navbar_tab nestled" ng-show="navbar_show.menu" onclick="location.href='/menu'">
+				<div></div>
+				<ul>
+					<li>See the menu</li>
+					<li>Alter the menu [Management only]</li>
+				</ul>
+				<h2>MENU</h2>
+			</div>
+			<div id="dashboard_navbar_tables" class="dashboard_navbar_tab nestled" ng-show="navbar_show.tables" onclick="location.href='#/tables'">
+				<div></div>
+				<ul>
+					<li>Check table availability</li>
+					<li>Record orders</li>
+					<li>Track dish completion/cook time</li>
+				</ul>
+				<h2>TABLES</h2>
+			</div>
+			<div id="dashboard_navbar_kitchen" class="dashboard_navbar_tab nestled" ng-show="navbar_show.kitchen" onclick="location.href='#/kitchen'">
+				<div></div>
+				<ul>
+					<li>Track dish completion</li>
+					<li>Notify the chefs</li>
+				</ul>
+				<h2>KITCHEN</h2>
+			</div>
+			<div id="dashboard_navbar_tips" class="dashboard_navbar_tab nestled" ng-show="navbar_show.tips" onclick="location.href='#/tips'">
+				<div></div>
+				<ul>
+					<li>Calculate your tip earnings</li>
+					<li>Compile tip data</li>
+					<li>Predict tips over time</li>
+				</ul>
+				<h2>TIPS</h2>
+			</div>
+			<div id="dashboard_navbar_inventory" class="dashboard_navbar_tab nestled" ng-show="navbar_show.inventory" onclick="location.href='#/inventory'">
+				<div></div>
+				<ul>
+					<li>Tally your supplies</li>
+					<li>Track income from each dish</li>
+				</ul>
+				<h2>INVENTORY</h2>
+			</div>
+			<div id="dashboard_navbar_personelle" class="dashboard_navbar_tab nestled" ng-show="navbar_show.personelle" onclick="location.href='#/personelle'">
+				<div></div>
+				<ul>
+					<li>Change worker account settings</li>
+					<li>Approve or deny shift change requests</li>
+				</ul>
+				<h2>PERSONELLE</h2>
+			</div>
+			<div id="dashboard_navbar_settings" class="dashboard_navbar_tab nestled" ng-show="navbar_show.settings" ng-click="dashboard_navbar_selected('settings')" onclick="location.href='#/settings'">
+				<div></div>
+				<ul>
+					<li>Change your account settings</li>
+					<li>Check paystubs</li>
+					<li>Calculate pay over time</li>
+				</ul>
+				<h2>SETTINGS</h2>
+			</div>
+		</div>
+	</div>
+	<h2><a id="home" class="no_decoration" href="#/">HOME</a></h2>
+	<h2><a id="logout" class="no_decoration" href="/">LOG OUT</a></h2>
+	<div id="empty_box" class="nestled"></div>
+	<div id="dashboard_partials" class="nestled" ng-view=""></div>
+
+</body>
+</html>
