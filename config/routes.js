@@ -10,10 +10,10 @@ var all_messages=[{username:'Adam',message:'where are those hot dogs??',date:'[1
 //  load other controllers here
 
 module.exports = function Routes(app) {
-    app.get('/',                                function(request, response) { users.index(request, response) });
+    app.get('/',                                function(req, res) { users.index(req, res) });
 //-----------------------------Ulysses-----------------------------
     //LOGIN
-    //Needs to be .post for request.body to work
+    //Needs to be .post for req.body to work
     app.post('/login',                          function(request, response) { users.login(request, response) });
     app.get('/dashboard',                       function(request, response) { users.goToDashboard(request, response) });
     //REGISTRATION
@@ -36,6 +36,8 @@ module.exports = function Routes(app) {
     app.get('/getSchedule.json',                function(request,response)  { main.getSchedule(request,response) });
     app.get('/getShift.json',                   function(request,response)  { main.getShift(request,response) });
     app.get('/getTips.json',                    function(request,response)  { main.getTips(request,response) });
+    app.get('/getPickup.json',                  function(request,response)  { main.getPickup(request,response) });
+    app.get('/getStaffList.json',               function(request,response)  { main.getStaffList(request,response) });
     
     app.post('/removeSchedule.json',            function(request,response)  { main.removeSchedule(request,response) });
     app.post('/takeShift.json',                 function(request,response)  { main.takeShift(request,response) });
@@ -44,6 +46,10 @@ module.exports = function Routes(app) {
     app.get('/menu',                            function(request, response) { menu.index(request, response) });
     app.get('/getMenu',                         function(request, response) { menu.getMenu(request, response) });
     app.post('/newOrder.json',                  function(request, response) { menu.newOrder(request, response) });
+    app.get('/mgr',                             function(request, response) { menu.mgr(request, response) });
+    app.post('/newItem.json',                   function(request, response) { menu.newItem(request, response) });
+    app.post('/removeItem.json',                function(request, response) { menu.removeItem(request, response) });
+    app.post('/updateItem.json',                function(request, response) { menu.updateMenu(request, response) });
 
     app.io.route('client_ready',    function(request) {
         // sending a message to just that person

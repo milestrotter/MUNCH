@@ -42,7 +42,13 @@ munch.controller('Registration',function($scope,CustomerFactory){
 });
 
 //DASHBOARD
+munch.controller('schedules',function($scope, ScheduleFactory){
+	ScheduleFactory.getTips(function(tipdata){
+		$scope.tips=tipdata;
+	})
+});
 munch.controller('DashboardNavbar',function($scope,CustomerFactory){
+	//loggedin user
 	CustomerFactory.getLoggedInUserDB(function(data){
 		$scope.logged_in_user=data;
 		$scope.navbar_show=CustomerFactory.getNavBar();

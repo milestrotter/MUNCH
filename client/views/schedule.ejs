@@ -24,80 +24,16 @@
             <script type="text/javascript" src="http://cdn.amcharts.com/lib/3/amcharts.js"></script>
             <script type="text/javascript" src="http://cdn.amcharts.com/lib/3/serial.js"></script>
             <script type="text/javascript">
-            
-                date = new Date();
-                $(document).on('click', '#addtipclick', function() {
-                    window.location.href = "http://localhost:6789/schedules"
-                })
-                $(document).on('click', '#tipclick', function() {
-                    tipArray = [];
-                    $('#loopContainer').find('div').each(function() { 
-                        var object =  {"date": $(this).attr('tipdate'), "amount": $(this).attr('tipamount')};
-                        tipArray.push(object);
-                    });
-                    $.ajax({
-                        type: 'GET',
-                        url: './javascripts/controllers/schedules.js',
-                        success: function (data) {
-                            AmCharts.makeChart("chartdiv",
-                            {
-                                "type": "serial",
-                                "pathToImages": "http://cdn.amcharts.com/lib/3/images/",
-                                "categoryField": "date",
-                                "startDuration": 1,
-                                "categoryAxis": {
-                                    "gridPosition": "start"
-                                },
-                                "trendLines": [],
-                                "graphs": [
-                                    {
-                                        "balloonText": "[[value]]",
-                                        "bullet": "round",
-                                        "id": "AmGraph-1",
-                                        "title": "Tip History",
-                                        "type": "smoothedLine",
-                                        "valueField": "amount"
-                                    },
-                                ],
-                                "guides": [],
-                                "valueAxes": [
-                                    {
-                                        "id": "ValueAxis-1",
-                                        "title": "Amount"
-                                    }
-                                ],
-                                "allLabels": [],
-                                "balloon": {},
-                                "legend": {
-                                    "useGraphSettings": true
-                                },
-                                "titles": [
-                                    {
-                                        "id": "Title-1",
-                                        "size": 15,
-                                        "text": "Tips"
-                                    }
-                                ],
-                                "dataProvider": tipArray,
-                            }
-                        );
 
-                            }
-                        })
-                })
-
-    </script>
+            </script>
 
 </head>
     <body>
-        <div id='loopContainer'>
-            <div id='{{tip._id}}' tipdate='{{tip.date}}' tipamount='{{tip.amount}}' ng-repeat="tip in tips"></div>
-        </div>
         <div id='notebook'> 
             <div id='calendar2'></div>
             <div id='calendar'></div>
         </div>
-        <a href='#/shifts'>View Open Shifts</a> | <a href='#/tips' id='tipclick'>View Tips</a>
+        <a href='/'>Home</a>
         <div ng-view=""></div>
         </div>
     </body>

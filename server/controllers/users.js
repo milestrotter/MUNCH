@@ -20,9 +20,11 @@ module.exports = {
         var d=new Date();
         d=d.toDateString();
         User.create({firstname:'Anders',lastname:'Holmvik',username:'DERS',email:'DJango@yahoo.com',phone:'555-555-5555',password:'1',account_type:'mgmt'});
+
         User.create({firstname:'Blake',lastname:'Anderson',username:'BLAKE',email:'poppy@gmail.com',phone:'444-444-4444',password:'2',account_type:'personal'});
         User.create({firstname:'Adam',lastname:'DeMamp',username:'ADAM',email:'dude@msn.com',phone:'333-333-3333',password:'3',account_type:'personal'});
         User.create({firstname:'-',lastname:'-',username:'TEAM',email:'team@restaurant.com',phone:'222-222-2222',password:'4',account_type:'team'});
+
         DashboardMessage.create(
             {message:'Clean up that stuff on the floor, what is that even',username:'BIGBOSS',date:d},
             {message:'Need more beer, now!',username:'BIGBOSS',date:d},

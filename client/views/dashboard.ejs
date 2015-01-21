@@ -9,12 +9,78 @@
     <script type="text/javascript" src="../javascripts/factories/factories.js"></script>
     <script type="text/javascript" src="../javascripts/controllers/controllers.js"></script>
 <!-- Chris -->
+	<link rel="stylesheet" type="text/css" href="/stylesheets/calendarstyle.css" />
+	<link rel="stylesheet" type="text/css" href="/stylesheets/personelle.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <script type="text/javascript" src="../javascripts/controllers/schedules.js"></script>
     <script type="text/javascript" src="../javascripts/factories/ScheduleFactory.js"></script>
+    <script type="text/javascript" src="http://cdn.amcharts.com/lib/3/amcharts.js"></script>
+    <script type="text/javascript" src="http://cdn.amcharts.com/lib/3/serial.js"></script>
 
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript">
+
+		date = new Date();
+		$(document).on('click', '#addtipclick', function() {
+            window.location.href = "http://localhost:6789/dashboard"
+        })
+        $(document).on('click', '#dashboard_navbar_tips', function() {
+            tipArray = [];
+            $('#loopContainer').find('div').each(function() { 
+                var object =  {"date": $(this).attr('tipdate'), "amount": $(this).attr('tipamount')};
+                tipArray.push(object);
+            });
+            $.ajax({
+                type: 'GET',
+                url: './javascripts/controllers/schedules.js',
+                success: function (data) {
+                    AmCharts.makeChart("chartdiv",
+                    {
+                        "type": "serial",
+                        "pathToImages": "http://cdn.amcharts.com/lib/3/images/",
+                        "categoryField": "date",
+                        "startDuration": 1,
+                        "categoryAxis": {
+                            "gridPosition": "start"
+                        },
+                        "trendLines": [],
+                        "graphs": [
+                            {
+                                "balloonText": "[[value]]",
+                                "bullet": "round",
+                                "id": "AmGraph-1",
+                                "title": "Tip History",
+                                "type": "smoothedLine",
+                                "valueField": "amount"
+                            },
+                        ],
+                        "guides": [],
+                        "valueAxes": [
+                            {
+                                "id": "ValueAxis-1",
+                                "title": "Amount"
+                            }
+                        ],
+                        "allLabels": [],
+                        "balloon": {},
+                        "legend": {
+                            "useGraphSettings": true
+                        },
+                        "titles": [
+                            {
+                                "id": "Title-1",
+                                "size": 15,
+                                "text": "Tips"
+                            }
+                        ],
+                        "dataProvider": tipArray,
+                    }
+                );
+
+                    }
+                })
+        })
 
     var io = io.connect();
     io.emit('new_screen',{msg:'read to get existing messages'});
@@ -57,6 +123,7 @@
             });
         });
         $(document).on('click','.dashboard_navbar_tab',function(){
+        	$('#dashboard_partials').css('width, 800px');
         	$('.dashboard_navbar_tab *').stop(true,true);
         	$('#empty_box').hide();
         	$('#dashboard_partials').css('width','100%');
@@ -161,6 +228,9 @@
 	<h2><a id="logout" class="no_decoration" href="/">LOG OUT</a></h2>
 	<div id="empty_box" class="nestled"></div>
 	<div id="dashboard_partials" class="nestled" ng-view=""></div>
+	<div ng-controller='schedules' id='loopContainer'>
+            <div id='{{tip._id}}' tipdate='{{tip.date}}' tipamount='{{tip.amount}}' ng-repeat="tip in tips"></div>
+    </div>
 
 </body>
 </html>
