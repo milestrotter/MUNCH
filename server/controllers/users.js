@@ -4,6 +4,7 @@ var mongoose = require('mongoose')
 var User = mongoose.model('User');
 var DashboardMessage = mongoose.model('DashboardMessage');
 var DashboardSpecial = mongoose.model('DashboardSpecial');
+
 var logged_in_user = {};
 
 module.exports = {
@@ -74,6 +75,17 @@ module.exports = {
         DashboardSpecial.find({},function(err,db_dashboard_specials){
             // console.log(db_dashboard_specials);
             response.send(db_dashboard_specials);
+        });
+    },
+
+
+    //PROFILE
+    editProfile: function(request, response) {
+        console.log('USERS: ',request.body[0]._id);
+        User.findByIdAndUpdate(request.body[0]._id,{$set:{firstname:request.body[0].firstname,lastname:request.body[0].lastname,email:request.body[0].email,phone:request.body[0].phone,password:request.body[1]}},function(err,db_data){
+            console.log('updated as: ',db_data);
+            logged_in_user=db_data;
+            response.send(db_data);
         });
     }
 }

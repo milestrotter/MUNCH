@@ -18,8 +18,8 @@
 
     var io = io.connect();
     io.emit('client_ready');
-    io.on('info', function(msg) {
-        console.log("Received 'info' event as well as the following message:", msg);
+    io.on('sending_logged_in_user', function(msg) {
+        console.log("message:", msg);
     });
 
     $(document).ready(function(){
@@ -55,6 +55,19 @@
         	$('.dashboard_navbar_tab').find('h2').css('top','-53%');
         	$('#dashboard_navbar').css('top','0%');
         });
+
+
+        //PROFILE PARTIAL jQUERY
+        $(document).on('click','#profile_edit_button',function(){
+        	$('#profile_table input:not(.static)').css('border','solid gray 1px');
+		});
+		$(document).on('click','#profile_save_button',function(){
+        	$('#profile_table input').css('border','none');
+        	$('#profile_saved').show();
+        	$('#profile_saved').animate({'opacity':'0'},3000,function(){
+        		$('#profile_saved').hide();
+        	});
+		});
     </script>
 </head>
 <body ng-app="munch" ng-controller="DashboardNavbar">
@@ -119,14 +132,14 @@
 				</ul>
 				<h2>PERSONELLE</h2>
 			</div>
-			<div id="dashboard_navbar_settings" class="dashboard_navbar_tab nestled" ng-show="navbar_show.settings" ng-click="dashboard_navbar_selected('settings')" onclick="location.href='#/settings'">
+			<div id="dashboard_navbar_profile" class="dashboard_navbar_tab nestled" ng-show="navbar_show.profile" ng-click="dashboard_navbar_selected('profile')" onclick="location.href='#/profile'">
 				<div></div>
 				<ul>
 					<li>Change your account settings</li>
 					<li>Check paystubs</li>
 					<li>Calculate pay over time</li>
 				</ul>
-				<h2>SETTINGS</h2>
+				<h2>PROFILE</h2>
 			</div>
 		</div>
 	</div>
