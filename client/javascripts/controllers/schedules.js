@@ -1,5 +1,7 @@
 munch.controller('schedules',function($scope, ScheduleFactory){
-
+	ScheduleFactory.getStaffList(function(data){
+		$scope.staffList = data;
+	})
 	ScheduleFactory.getLoggedInUserDB(function(data){
 		$scope.logged_in_user=data;
 	});
@@ -12,11 +14,13 @@ munch.controller('schedules',function($scope, ScheduleFactory){
 			}
 		}
 	})
+	ScheduleFactory.getPickup(function(newdata){
+		$scope.pickup=newdata;
+	});
 	ScheduleFactory.getShift(function(shiftdata){
 		$scope.shifts=shiftdata;
 	});
 	$scope.addTip = function (tipAmount, username){
-		console.log("USERNAME FROM CONTROLLER", username);
 		ScheduleFactory.addTip(tipAmount, username);
 	}
 
@@ -26,7 +30,13 @@ munch.controller('schedules',function($scope, ScheduleFactory){
 	    	
 		})
 		ScheduleFactory.getSchedule(function(data){
-	 	$scope.schedules=data;
+	        $scope.schedules = [];
+			for(schedule in data){
+				if(data[schedule].staff === $scope.logged_in_user.username){
+					$scope.schedules.push(data[schedule]);
+				}
+			}
+	 	data = $scope.schedules
 			$('#calendar').fullCalendar('removeEvents');
 			$('#calendar').fullCalendar('addEventSource', data);         
 			$('#calendar').fullCalendar('rerenderEvents' );
@@ -38,7 +48,13 @@ munch.controller('schedules',function($scope, ScheduleFactory){
 	
 
 	ScheduleFactory.getSchedule(function(data){
-	 	$scope.schedules=data;
+		$scope.schedules = [];
+		for(schedule in data){
+			if(data[schedule].staff === $scope.logged_in_user.username){
+				$scope.schedules.push(data[schedule]);
+			}
+		}
+		data = $scope.schedules;
 		date = new Date();  
 	    $('#calendar').fullCalendar({
 	    header: {
@@ -73,7 +89,13 @@ munch.controller('schedules',function($scope, ScheduleFactory){
         	scheduleId = calEvent._id;
         	if(confirm("Are you sure you want to release the following shift?\n\n" + calEvent.title + ".\n\n")){
         		ScheduleFactory.removeSchedule(calEvent,function(data){
-        			$scope.schedules=data;
+        			$scope.schedules = [];
+					for(schedule in data){
+						if(data[schedule].staff === $scope.logged_in_user.username){
+							$scope.schedules.push(data[schedule]);
+						}
+					}
+					data = $scope.schedules;
         			$('#calendar').fullCalendar('removeEvents');
       				$('#calendar').fullCalendar('addEventSource', data);         
       				$('#calendar').fullCalendar('rerenderEvents' );

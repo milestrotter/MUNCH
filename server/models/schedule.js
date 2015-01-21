@@ -5,7 +5,8 @@ var ScheduleSchema = new mongoose.Schema({
 	start: String,
 	end: String,
 	start: String,
-	date: String
+	date: String,
+	staff: String,
 });
 
 ScheduleSchema.path('title').required(true, 'Schedule name cannot be blank');

@@ -29,6 +29,8 @@ module.exports = function Routes(app) {
     app.get('/getSchedule.json',                function(request,response)  { main.getSchedule(request,response) });
     app.get('/getShift.json',                   function(request,response)  { main.getShift(request,response) });
     app.get('/getTips.json',                    function(request,response)  { main.getTips(request,response) });
+    app.get('/getPickup.json',                  function(request,response)  { main.getPickup(request,response) });
+    app.get('/getStaffList.json',               function(request,response)  { main.getStaffList(request,response) });
     
     app.post('/removeSchedule.json',            function(request,response)  { main.removeSchedule(request,response) });
     app.post('/takeShift.json',                 function(request,response)  { main.takeShift(request,response) });

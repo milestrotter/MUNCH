@@ -20,6 +20,7 @@ module.exports = {
         //Initialize 'users' collection
         User.create({firstname:'Anders',lastname:'Holmvik',username:'DERS',email:'DJango@yahoo.com',phone:'555-555-5555',password:'1',account_type:'mgmt'});
         User.create({firstname:'Big',lastname:'Notorious',username:'BIGBOSS',email:'bigboss@yahoo.com',phone:'555-555-5555',password:'1',account_type:'personal'});
+         User.create({firstname:'Random',lastname:'Person',username:'PERSON',email:'johndoe@yahoo.com',phone:'555-555-5555',password:'1',account_type:'personal'});
         DashboardMessage.create(
             {message:'Clean up that stuff on the floor, what is that even',username:'BIGBOSS',date:d},
             {message:'Need more beer, now!',username:'BIGBOSS',date:d},

@@ -2,6 +2,7 @@ munch.factory('ScheduleFactory', function($http){
 	var shifts = [];
 	var schedules = [];
 	var factory = {};
+	var staffList = [];
 
 	var logged_in_user = {};
 	
@@ -31,16 +32,22 @@ munch.factory('ScheduleFactory', function($http){
 			}
 		}
 	}
+	factory.getPickup = function(callback){
+		$http.get('/getPickup.json').success(function(output){
+			pickup = output;
+			callback(pickup);
+		})
+	}	
 	factory.getShift = function(callback){
 		$http.get('/getShift.json').success(function(output){
 			shifts = output;
 			callback(shifts);
 		})
 	}
-	factory.retrieveShifts = function(){
-		return shifts;
-	}
-	factory.takeShift = function(item,callback){
+	// factory.retrieveShifts = function(){
+	// 	return shifts;
+	// }
+	factory.takeShift = function(item){
 		$http.post('/takeShift.json', item).success(function(output){
 			callback(item);
 		})
@@ -59,6 +66,12 @@ munch.factory('ScheduleFactory', function($http){
 		date = new Date();
 		$http.post('/addTip.json', {date: date, amount: tipAmount, username:username}).success(function(output){
 
+		})
+	}
+	factory.getStaffList = function(callback){
+		$http.get('/getStaffList.json').success(function(output){
+			staff = output
+			callback(staff);
 		})
 	}
 	return factory;
