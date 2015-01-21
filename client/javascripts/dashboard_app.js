@@ -28,7 +28,7 @@ munch.config(function($routeProvider){
 			})
 		.when('/tips',
 			{
-				templateUrl:'javascripts/partials/tips.html'
+				templateUrl:'javascripts/partials/tipGraph.ejs'
 			})
 		.when('/inventory',
 			{
