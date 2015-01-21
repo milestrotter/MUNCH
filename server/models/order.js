@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-
+var d=new Date();
 var OrderSchema = new mongoose.Schema({
 	name: String,
 	description: String,
@@ -12,7 +12,7 @@ var OrderSchema = new mongoose.Schema({
 	},
 	price: String,
 	qty: Number,
-	date: Date
+	date: {type: Date, default: d }
 });
 
 // OrderSchema.path('name').required(true, 'Schedule name cannot be blank');
