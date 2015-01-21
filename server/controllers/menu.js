@@ -34,11 +34,19 @@ module.exports = {
             res.send(JSON.stringify(results));
         });
     },
+    mgr: function(req, res){
+        // Menu.find({}, function(err, results) {
+        //     console.log('here in the index json controller now!!');
+        //     console.log('results: ', results)
+        //     res.send(JSON.stringify(results));
+        // });
+      res.render('../../client/views/mgr_menu',{ title: 'MANAGER MENU' });
+    },
+
     newOrder: function(req, res){
         console.log("*********************************");
         console.log(req.body);
-        var a = new Order(req.body);
-        a = new Order(request.body);
+        a = new Order(req.body);
         a.save(function(err) {
             if (err) {
                 response.send(JSON.stringify(err));
@@ -46,10 +54,17 @@ module.exports = {
                 console.log('success: created new Order');
             }
         });
-        // Order.insert({req.body}, function(err, results) {
-        //     console.log('here in the index json controller now!!');
-        //     console.log('results: ', results);
-        //     res.send(JSON.stringify(results));
-        // });
+    },
+    updateOrder: function(req, res){
+        console.log("*********************************");
+        console.log(req.body);
+        a = new Order(req.body);
+        a.save(function(err) {
+            if (err) {
+                response.send(JSON.stringify(err));
+            } else {
+                console.log('success: created new Order');
+            }
+        });
     },
 }

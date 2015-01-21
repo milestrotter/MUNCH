@@ -34,6 +34,7 @@ module.exports = function Routes(app) {
     app.get('/menu',                            function(request, response) { menu.index(request, response) });
     app.get('/getMenu',                         function(request, response) { menu.getMenu(request, response) });
     app.post('/newOrder.json',                  function(request, response) { menu.newOrder(request, response) });
+    app.get('/mgr',                             function(request, response) { menu.mgr(request, response) });
 
     app.io.route('client_ready',    function(request) {
         console.log('A new user connected.');

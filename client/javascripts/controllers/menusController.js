@@ -17,6 +17,14 @@ munch.controller('menusController', function($scope, MenuFactory){
 		});
 
 	}
+	$scope.updateMenu = function(name, description, price){
+		console.log(name, description, price);
+		// $scope.order = MenuFactory.newOrder(name, description, price, function(data){
+		// 	mydata = data;
+		// 	console.log(mydata);
+		// });
+
+	}
 	$scope.setOutputs = function(index, value){
 		if ($scope.notes[index] == null && $scope.notes[index] != value) {
 			$scope.notes[index] = value;
