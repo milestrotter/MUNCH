@@ -12,7 +12,7 @@ munch.controller('LoginIntro',function($scope,CustomerFactory){
 				console.log('got an error when logging in!');
 			}else{
 				$scope.logged_in_user=data;
-				console.log($scope.logged_in_user);
+				console.log('controller',$scope.logged_in_user);
 			}
 		});
 	}
@@ -37,21 +37,34 @@ munch.controller('Registration',function($scope,CustomerFactory){
 		$scope.tab_clickable=false;
 	}
 	$scope.user_type=function(user_type){
-		console.log('user_type');
 		CustomerFactory.selectUserType(user_type);
 	}
 });
 
 //DASHBOARD
+munch.controller('schedules',function($scope, ScheduleFactory){
+	ScheduleFactory.getTips(function(tipdata){
+		$scope.tips=tipdata;
+	})
+});
 munch.controller('DashboardNavbar',function($scope,CustomerFactory){
-	$scope.navbar_show=CustomerFactory.getNavBar();
+	//loggedin user
+	CustomerFactory.getLoggedInUserDB(function(data){
+		$scope.logged_in_user=data;
+		$scope.navbar_show=CustomerFactory.getNavBar();
+	});
 });
 munch.controller('DashboardMessages',function($scope,CustomerFactory){
-	$scope.dashboard_username=CustomerFactory.getLoggedInUser();
 	CustomerFactory.getDashboardMessages(function(data){
 		$scope.dashboard_messages=data;
 	});
 	CustomerFactory.getDashboardSpecials(function(data){
 		$scope.dashboard_specials=data;
 	});
+});
+munch.controller('Profile',function($scope,CustomerFactory){
+	$scope.profile_save=function(id,password){
+		CustomerFactory.editProfile($scope.logged_in_user,password,function(data){
+		});
+	}
 });

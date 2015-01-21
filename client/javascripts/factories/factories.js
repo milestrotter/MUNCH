@@ -16,7 +16,7 @@ munch.factory('CustomerFactory',function($http){
 	var users=[];
 
 	//Need to empty username if you want the login stuff to be empty...
-	var logged_in_user={username:'Mac Swanson'};
+	var logged_in_user={username:''};
 
 	var account_type='';
 
@@ -39,13 +39,21 @@ munch.factory('CustomerFactory',function($http){
 				login_error=output;
 			}else{
 				logged_in_user=output;
+				console.log('factory.login',logged_in_user);
 			}
 			callback(logged_in_user);
 		});
 		return logged_in_user;
 	}
 	factory.getLoggedInUser=function(){
-		console.log('getLoggedInUser',logged_in_user.username.length);
+		console.log('getLoggedInUser',logged_in_user);
+		return logged_in_user;
+	}
+	factory.getLoggedInUserDB=function(callback){
+		$http.get('/getLoggedInUserDB.json').success(function(output){
+			logged_in_user=output;
+			callback(logged_in_user);
+		});
 		return logged_in_user;
 	}
 	factory.makeNewUser=function(new_user){
@@ -65,7 +73,6 @@ munch.factory('CustomerFactory',function($http){
 			$http.post('/makeNewUser.json',new_user_info).success(function(output){
 				new_user_info={};
 			});
-			
 		}
 	}
 	factory.getRegistrationErrors=function(){
@@ -82,20 +89,16 @@ munch.factory('CustomerFactory',function($http){
 	}
 
 	factory.getNavBar=function(){
-		var to_show={account_type:'personal'};
-		if(to_show.account_type=='team'){
-			return {schedule:false,menu:true,tables:true,kitchen:true,tips:false,inventory:false,personelle:false,settings:true};
+		if(logged_in_user.account_type=='team'){
+			return {schedule:false,menu:true,tables:true,kitchen:true,tips:false,inventory:false,personelle:false,profile:true};
 		}
-		if(to_show.account_type=='personal'){
-			return {schedule:true,menu:true,tables:false,kitchen:false,tips:true,inventory:false,personelle:false,settings:true};
+		if(logged_in_user.account_type=='personal'){
+			return {schedule:true,menu:true,tables:false,kitchen:false,tips:true,inventory:false,personelle:false,profile:true};
 		}
-		if(to_show.account_type=='mgmt'){
-			return {schedule:false,menu:true,tables:false,kitchen:false,tips:false,inventory:true,personelle:true,settings:true};
+		if(logged_in_user.account_type=='mgmt'){
+			return {schedule:false,menu:true,tables:false,kitchen:false,tips:false,inventory:true,personelle:true,profile:true};
 		}
 	}
-	// factory.getDashboardMessages=function(){
-	// 	return dashboard_messages;
-	// }
 	factory.getDashboardMessages=function(callback){
 		$http.get('/getDashboardMessages.json').success(function(output){
 			dashboard_messages=output;
@@ -104,7 +107,6 @@ munch.factory('CustomerFactory',function($http){
 		return dashboard_messages;
 	}
 	factory.getDashboardSpecials=function(callback){
-		console.log('getDashboardSpecials');
 		$http.get('/getDashboardSpecials.json').success(function(output){
 			dashboard_specials=output;
 			callback(dashboard_specials);
@@ -112,6 +114,16 @@ munch.factory('CustomerFactory',function($http){
 		return dashboard_specials;
 	}
 
+
+	//PROFILE
+	factory.editProfile=function(user_new_info,password,callback){
+		console.log(user_new_info,password);
+		$http.post('/editProfile.json',[logged_in_user,password]).success(function(output){
+			logged_in_user=output;
+			callback(logged_in_user);
+		});
+		return logged_in_user;
+	}
 
 
 	return factory;

@@ -9,12 +9,85 @@
     <script type="text/javascript" src="../javascripts/factories/factories.js"></script>
     <script type="text/javascript" src="../javascripts/controllers/controllers.js"></script>
 <!-- Chris -->
+	<link rel="stylesheet" type="text/css" href="/stylesheets/calendarstyle.css" />
+	<link rel="stylesheet" type="text/css" href="/stylesheets/personelle.css" />
     <script type="text/javascript" src="../javascripts/controllers/schedules.js"></script>
     <script type="text/javascript" src="../javascripts/factories/ScheduleFactory.js"></script>
+    <script type="text/javascript" src="http://cdn.amcharts.com/lib/3/amcharts.js"></script>
+    <script type="text/javascript" src="http://cdn.amcharts.com/lib/3/serial.js"></script>
 
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript">
+
+		date = new Date();
+		$(document).on('click', '#addtipclick', function() {
+            window.location.href = "http://localhost:6789/dashboard"
+        })
+        $(document).on('click', '#dashboard_navbar_tips', function() {
+            tipArray = [];
+            $('#loopContainer').find('div').each(function() { 
+                var object =  {"date": $(this).attr('tipdate'), "amount": $(this).attr('tipamount')};
+                tipArray.push(object);
+            });
+            $.ajax({
+                type: 'GET',
+                url: './javascripts/controllers/schedules.js',
+                success: function (data) {
+                    AmCharts.makeChart("chartdiv",
+                    {
+                        "type": "serial",
+                        "pathToImages": "http://cdn.amcharts.com/lib/3/images/",
+                        "categoryField": "date",
+                        "startDuration": 1,
+                        "categoryAxis": {
+                            "gridPosition": "start"
+                        },
+                        "trendLines": [],
+                        "graphs": [
+                            {
+                                "balloonText": "[[value]]",
+                                "bullet": "round",
+                                "id": "AmGraph-1",
+                                "title": "Tip History",
+                                "type": "smoothedLine",
+                                "valueField": "amount"
+                            },
+                        ],
+                        "guides": [],
+                        "valueAxes": [
+                            {
+                                "id": "ValueAxis-1",
+                                "title": "Amount"
+                            }
+                        ],
+                        "allLabels": [],
+                        "balloon": {},
+                        "legend": {
+                            "useGraphSettings": true
+                        },
+                        "titles": [
+                            {
+                                "id": "Title-1",
+                                "size": 15,
+                                "text": "Tips"
+                            }
+                        ],
+                        "dataProvider": tipArray,
+                    }
+                );
+
+                    }
+                })
+        })
+
+    var io = io.connect();
+    io.emit('client_ready');
+    io.on('sending_logged_in_user', function(msg) {
+        console.log("message:", msg);
+    });
+
+
     $(document).ready(function(){
     	$('.dashboard_navbar_tab').css('opacity','0');
     	$('.dashboard_navbar_tab').animate({'opacity':'1'},1000);
@@ -36,20 +109,36 @@
             });
         });
         $(document).on('click','.dashboard_navbar_tab',function(){
+        	$('#dashboard_partials').css('width, 800px');
         	$('.dashboard_navbar_tab *').stop(true,true);
         	$('#empty_box').hide();
-    		$('#dashboard_navbar').css('margin-top','580px');
-    		$('.dashboard_navbar_tab').find('h2').css('top','-740px');
+        	$('#dashboard_partials').css('width','100%');
+    		$('#dashboard_navbar').css('top','90%');
+    		$('.dashboard_navbar_tab').find('h2').css('top','-97%');
         });
         $(document).on('click','#home',function(){
         	$('#empty_box').show();
-        	$('.dashboard_navbar_tab').find('h2').css('top','-400px');
-        	$('#dashboard_navbar').css('margin-top','0px');
+        	$('#dashboard_partials').css('width','500px');
+        	$('.dashboard_navbar_tab').find('h2').css('top','-53%');
+        	$('#dashboard_navbar').css('top','0%');
         });
+
+
+        //PROFILE PARTIAL jQUERY
+        $(document).on('click','#profile_edit_button',function(){
+        	$('#profile_table input:not(.static)').css('border','solid gray 1px');
+		});
+		$(document).on('click','#profile_save_button',function(){
+        	$('#profile_table input').css('border','none');
+        	$('#profile_saved').show();
+        	$('#profile_saved').animate({'opacity':'0'},3000,function(){
+        		$('#profile_saved').hide();
+        	});
+		});
     </script>
 </head>
-<body ng-app="munch">
-	<div id="dashboard_navbar" class="nestled" ng-controller="DashboardNavbar">
+<body ng-app="munch" ng-controller="DashboardNavbar">
+	<div id="dashboard_navbar" class="nestled">
 		<div>
 			<div id="dashboard_navbar_schedule" class="dashboard_navbar_tab nestled" ng-show="navbar_show.schedule" onclick="location.href='/schedules'">
 				<div></div>
@@ -110,14 +199,14 @@
 				</ul>
 				<h2>PERSONELLE</h2>
 			</div>
-			<div id="dashboard_navbar_settings" class="dashboard_navbar_tab nestled" ng-show="navbar_show.settings" ng-click="dashboard_navbar_selected('settings')" onclick="location.href='#/settings'">
+			<div id="dashboard_navbar_profile" class="dashboard_navbar_tab nestled" ng-show="navbar_show.profile" ng-click="dashboard_navbar_selected('profile')" onclick="location.href='#/profile'">
 				<div></div>
 				<ul>
 					<li>Change your account settings</li>
 					<li>Check paystubs</li>
 					<li>Calculate pay over time</li>
 				</ul>
-				<h2>SETTINGS</h2>
+				<h2>PROFILE</h2>
 			</div>
 		</div>
 	</div>
@@ -125,6 +214,9 @@
 	<h2><a id="logout" class="no_decoration" href="/">LOG OUT</a></h2>
 	<div id="empty_box" class="nestled"></div>
 	<div id="dashboard_partials" class="nestled" ng-view=""></div>
+	<div ng-controller='schedules' id='loopContainer'>
+            <div id='{{tip._id}}' tipdate='{{tip.date}}' tipamount='{{tip.amount}}' ng-repeat="tip in tips"></div>
+    </div>
 
 </body>
 </html>

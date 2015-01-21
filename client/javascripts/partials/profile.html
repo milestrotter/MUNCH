@@ -1,0 +1,38 @@
+	<div id="dashboard_main" class="nestled" ng-controller="Profile">
+		<h1>{{logged_in_user.username}}</h1>
+		<h2>Profile <span id="profile_saved" class="neon_green">Saved!</span></h2>
+		<button id="profile_edit_button" ng-click="input_clickable=true" ng-show="!input_clickable">Edit</button>
+		<button id="profile_save_button" ng-click="profile_save(logged_in_user._id,password);input_clickable=false" ng-show="input_clickable">Save</button>
+		<table id="profile_table">
+			<tbody>
+				<tr>
+					<td>First Name:</td>
+					<td><input type="text" value="{{logged_in_user.firstname}}" ng-model="logged_in_user.firstname" ng-readonly="!input_clickable"></td>
+				</tr>
+				<tr>
+					<td>Last Name:</td>
+					<td><input type="text" value="{{logged_in_user.lastname}}" ng-model="logged_in_user.lastname" ng-readonly="!input_clickable"></td>
+				</tr>
+				<tr>
+					<td>Email:</td>
+					<td><input type="text" value="{{logged_in_user.email}}" ng-model="logged_in_user.email" ng-readonly="!input_clickable"></td>
+				</tr>
+				<tr>
+					<td>Phone:</td>
+					<td><input type="text" value="{{logged_in_user.phone}}" ng-model="logged_in_user.phone" ng-readonly="!input_clickable"></td>
+				</tr>
+				<tr>
+					<td>Change Password:</td>
+					<td><input type="password" ng-model="password" ng-readonly="!input_clickable"></td>
+				</tr>
+				<tr>
+					<td>New Password Confirm:</td>
+					<td><input type="password" ng-model="password_confirm" ng-readonly="!input_clickable"></td>
+				</tr>
+				<tr>
+					<td>Account type:</td>
+					<td><input type="text" class="static" value="{{logged_in_user.account_type}}" readonly></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>

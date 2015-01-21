@@ -5,6 +5,8 @@ var User = mongoose.model('User');
 var DashboardMessage = mongoose.model('DashboardMessage');
 var DashboardSpecial = mongoose.model('DashboardSpecial');
 
+var logged_in_user = {};
+
 module.exports = {
     index: function(request, response) {
         User.remove({},function(err,removed){
@@ -31,7 +33,6 @@ module.exports = {
     },
     login: function(request, response){
         User.findOne({username:request.body.username.toUpperCase()},function(err,db_found_user){
-            console.log('IN: ',db_found_user);
             if(db_found_user.length==0){
                 console.log('User not found.');
                 response.send('User not found.');
@@ -42,7 +43,8 @@ module.exports = {
                     console.log('actual: ',db_found_user.password);
                     response.send('Incorrect password.');
                 }else{
-                    console.log('FOUND: ',db_found_user);
+                    logged_in_user=db_found_user;
+                    console.log('FOUND: ',logged_in_user);
                     response.send(db_found_user);
                 }
             }
@@ -58,18 +60,32 @@ module.exports = {
             }
         });
     },
+    getLoggedInUserDB: function(request, response) {
+        response.send(logged_in_user);
+    },
     getDashboardMessages: function(request, response) {
-        console.log('got to: getDashboardMessages');
+        // console.log('got to: getDashboardMessages');
         DashboardMessage.find({},function(err,db_dashboard_messages){
-            console.log(db_dashboard_messages);
+            // console.log(db_dashboard_messages);
             response.send(db_dashboard_messages);
         });
     },
     getDashboardSpecials: function(request, response) {
-        console.log('got to: getDashboardSpecials');
+        // console.log('got to: getDashboardSpecials');
         DashboardSpecial.find({},function(err,db_dashboard_specials){
-            console.log(db_dashboard_specials);
+            // console.log(db_dashboard_specials);
             response.send(db_dashboard_specials);
+        });
+    },
+
+
+    //PROFILE
+    editProfile: function(request, response) {
+        console.log('USERS: ',request.body[0]._id);
+        User.findByIdAndUpdate(request.body[0]._id,{$set:{firstname:request.body[0].firstname,lastname:request.body[0].lastname,email:request.body[0].email,phone:request.body[0].phone,password:request.body[1]}},function(err,db_data){
+            console.log('updated as: ',db_data);
+            logged_in_user=db_data;
+            response.send(db_data);
         });
     }
 }

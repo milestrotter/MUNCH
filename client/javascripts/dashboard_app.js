@@ -28,7 +28,7 @@ munch.config(function($routeProvider){
 			})
 		.when('/tips',
 			{
-				templateUrl:'javascripts/partials/tips.html'
+				templateUrl:'javascripts/partials/tipGraph.ejs'
 			})
 		.when('/inventory',
 			{
@@ -38,18 +38,10 @@ munch.config(function($routeProvider){
 			{
 				templateUrl:'javascripts/partials/personelle.html'
 			})
-		.when('/settings',
+		.when('/profile',
 			{
-				templateUrl:'javascripts/partials/settings.html'
+				templateUrl:'javascripts/partials/profile.html'
 			})
-		// .when('/learn_more',
-		// 	{
-		// 		templateUrl:'javascripts/partials/login_learn_more.html'
-		// 	})
-		// .when('/info',
-		// 	{
-		// 		templateUrl:'javascripts/partials/login_info.html'
-		// 	})
 		.otherwise({
 			redirectTo:'/'
 		});

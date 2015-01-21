@@ -8,9 +8,10 @@ body {
 	height: 800px;
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	background-image: url(../imgs/login_bg_img_1.jpg);
-	background-size: 1500px 1000px;
+	background-size: 1500px auto;
 	background-repeat: no-repeat;
-	background-position: 0px -150px;
+	background-position: 0px -50px;
+	/*overflow: hidden;*/
 }
 	.nestled{
 		display: inline-block;
@@ -51,7 +52,7 @@ body {
 		z-index: 99;
 		margin: 30px;
 		padding: 20px;
-		width: 680px;
+		width: 600px;
 		height: 330px;
 		background-color: rgba(25,38,31,0.8);
 		position: relative;
@@ -121,14 +122,18 @@ body {
 				}
 /*----------#login_main----------*/
 		#login_main{
-			width: 1400px;
-			z-index: 2;
+			width: 1500px;
 			position: absolute;
-			top: 450px;
-			margin: 0px auto;
-			left: 0;
-			right: 0;
 		}
+			#login_main_center_div{
+				width: 1280px;
+				z-index: 2;
+				position: absolute;
+				top: -350px;
+				margin: 0px auto;
+				left: 0;
+				right: 0;
+			}
 			.login_main_tabs{
 				width: 380px;
 				height: 370px;
@@ -201,17 +206,18 @@ body {
 				}
 				#registration_form input{
 					margin-bottom: 3px;
-					border: solid 1px RGB(86,86,86);
+					border-style: solid;
+					border-width: 1px;
 					width: 200px;
 					text-align: center;
 				}
 				#registration_form input[type='submit'],#register_done{
 					width: 202px;
 				}
-				.ng-invalid.ng-dirty{
+				.ng-dirty.ng-invalid{
 					border-color: RGB(243,41,1);
 				}
-				.ng-valid.ng-dirty{
+				.ng-dirty.ng-valid{
 					border-color: RGB(127,226,46);
 				}
 	h1{
