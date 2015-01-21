@@ -19,9 +19,7 @@
         io.on('info', function(msg) {
             console.log("Received 'info' event as well as the following message:", msg);
         });
-        $(document).on('click','#go_to_dashboard',function(){
-            io.emit('user_logged_in',logged_in_user);
-        });
+        io.emit('user_logged_in',{user:'abcd'});
 
         $(document).ready(function(){
             var random_num=Math.floor(Math.random()*3);
@@ -39,10 +37,11 @@
             $('#login_intro_left h3').html('Choose an account type:');
             $('#cancel').toggle();
             $('#login_intro_left').animate({paddingTop:'0px'},300);
-            $('#login_main').animate({'top':'230px'},300);
+            $('#login_main_center_div').animate({'top':'-480px'},300);
             $('.login_main_tabs').css('cursor','pointer');
             $('.login_main_tabs').css('border','solid RGB(127,226,46) 2px');
             $(document).on('mouseenter','.login_main_tabs',function(){
+                $('#login_intro_left_loginbar').stop();
                 var orig_bg_opacity=$(this).css('background-color');
                 $(this).css('background-color',orig_bg_opacity.slice(0,-4)+'0.8)');
                 $(this).mouseleave(function(){
@@ -71,7 +70,7 @@
             $('#login_intro_left h3').html('Or Register:');
             $('#go_to_register').toggle();
             $('#login_intro_left').animate({'padding-top':'100px'},300);
-            $('#login_main').animate({'top':'450px'},300);
+            $('#login_main_center_div').animate({'top':'-350px'},300);
         });
     </script>
 </head>
@@ -115,95 +114,97 @@
     </div>
 
     <div id="login_main">
-        <div id="login_main_hosts" class="login_main_tabs nestled" ng-click="tab_clickable && user_type('team')">
-            <h2>FOR THE WHOLE TEAM</h2>
-            <div class="login_main_tabs_content">
-                <ul>
-                    <li>Check table availability</li>
-                    <li>Reserve tables</li>
-                    <li>Track order completion and cook time</li>
-                    <li>Prioritize orders</li>
-                </ul>
-            </div>
-            <div class="login_main_tabs_imgwrapper">
-            </div>
-        </div>
-        <div id="login_main_personal" class="login_main_tabs nestled" ng-click="tab_clickable && user_type('personal')">
-            <h2>FOR YOU</h2>
-            <div class="login_main_tabs_content">
-                <ul>
-                    <li>Check your schedule</li>
-                    <li>Request shift changes and send messages</li>
-                    <li>Calculate your tips and earnings over time</li>
-                    <li>Check your paystubs</li>
-                </ul>
+        <!-- #login_main_center_div purely for centering tabs -->
+        <div id="login_main_center_div">
+            <div id="login_main_hosts" class="login_main_tabs nestled" ng-click="tab_clickable && user_type('team')">
+                <h2>FOR THE WHOLE TEAM</h2>
+                <div class="login_main_tabs_content">
+                    <ul>
+                        <li>Check table availability</li>
+                        <li>Reserve tables</li>
+                        <li>Track order completion and cook time</li>
+                        <li>Prioritize orders</li>
+                    </ul>
+                </div>
                 <div class="login_main_tabs_imgwrapper">
                 </div>
             </div>
-        </div>
-        <div id="login_main_mgmt" class="login_main_tabs nestled" ng-click="tab_clickable && user_type('mgmt')">
-            <h2>FOR MANAGEMENT</h2>
-            <div class="login_main_tabs_content">
-                <ul>
-                    <li>Manage shift change requests</li>
-                    <li>Monitor employee hours</li>
-                    <li>Track inventory</li>
-                    <li>Alter the menu</li>
-                </ul>
-                <div class="login_main_tabs_imgwrapper">
+            <div id="login_main_personal" class="login_main_tabs nestled" ng-click="tab_clickable && user_type('personal')">
+                <h2>FOR YOU</h2>
+                <div class="login_main_tabs_content">
+                    <ul>
+                        <li>Check your schedule</li>
+                        <li>Request shift changes and send messages</li>
+                        <li>Calculate your tips and earnings over time</li>
+                        <li>Check your paystubs</li>
+                    </ul>
+                    <div class="login_main_tabs_imgwrapper">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div id="registration_form_wrapper" class="hidden nestled">
-            <div ng-show="!registration_success.status">
-                <div id="registration_errors">
-                    <p class="red" ng-repeat="registration_error in registration_errors">{{registration_error.message}}</p>
-                    <!-- <p class="red">{{registration_errors}}</p> -->
+            <div id="login_main_mgmt" class="login_main_tabs nestled" ng-click="tab_clickable && user_type('mgmt')">
+                <h2>FOR MANAGEMENT</h2>
+                <div class="login_main_tabs_content">
+                    <ul>
+                        <li>Manage shift change requests</li>
+                        <li>Monitor employee hours</li>
+                        <li>Track inventory</li>
+                        <li>Alter the menu</li>
+                    </ul>
+                    <div class="login_main_tabs_imgwrapper">
+                    </div>
                 </div>
-                <p>Please fill out the following required fields.</p>
-                <form id="registration_form" name="reg_form" ng-submit="reg_form.$valid && makeNewUser(new_user)" novalidate >
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>first name</td>
-                                <td><input type="text" ng-model="new_user.firstname" placeholder="first name" required autofocus></td>
-                            </tr>
-                            <tr>
-                                <td>last name</td>
-                                <td><input type="text" ng-model="new_user.lastname" placeholder="last name" required></td>
-                            </tr>
-                            <tr>
-                                <td>username</td>
-                                <td><input type="text" ng-model="new_user.username" placeholder="username" required></td>
-                            </tr>
-                            <tr>
-                                <td>email</td>
-                                <td><input type="text" ng-model="new_user.email" placeholder="email" name="email" required></td>
-                            </tr>
-                            <tr>
-                                <td>phone</td>
-                                <td><input type="text" ng-model="new_user.phone" placeholder="phone" required></td>
-                            </tr>
-                            <tr>
-                                <td>password</td>
-                                <td><input type="text" ng-model="new_user.password" placeholder="password" required></td>
-                            </tr>
-                            <tr>
-                                <td>confirmation</td>
-                                <td><input type="text" ng-model="new_user.passwordconfirm" placeholder="confirmation" required></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><input id="registration_form_submit" type="submit" value="Register!"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
             </div>
-            <div ng-show="registration_success.status">
-                <p>You have successfully registered!</p>
-                <p>Welcome to MUNCH.</p>
-                <button id="register_done" ng-click="redisplayForm()">OK</button>
+            <div id="registration_form_wrapper" class="hidden nestled">
+                <div ng-show="!registration_success.status">
+                    <div id="registration_errors">
+                        <p class="red" ng-repeat="registration_error in registration_errors">{{registration_error.message}}</p>
+                    </div>
+                    <p>Please fill out the following required fields.</p>
+                    <form id="registration_form" name="reg_form" ng-submit="reg_form.$valid && makeNewUser(new_user)" novalidate >
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>first name</td>
+                                    <td><input type="text" ng-model="new_user.firstname" placeholder="first name" required autofocus></td>
+                                </tr>
+                                <tr>
+                                    <td>last name</td>
+                                    <td><input type="text" ng-model="new_user.lastname" placeholder="last name" required></td>
+                                </tr>
+                                <tr>
+                                    <td>username</td>
+                                    <td><input type="text" ng-model="new_user.username" placeholder="username" required></td>
+                                </tr>
+                                <tr>
+                                    <td>email</td>
+                                    <td><input type="text" ng-model="new_user.email" placeholder="email" name="email" required></td>
+                                </tr>
+                                <tr>
+                                    <td>phone</td>
+                                    <td><input type="text" ng-model="new_user.phone" placeholder="phone" required></td>
+                                </tr>
+                                <tr>
+                                    <td>password</td>
+                                    <td><input type="text" ng-model="new_user.password" placeholder="password" required></td>
+                                </tr>
+                                <tr>
+                                    <td>confirmation</td>
+                                    <td><input type="text" ng-model="new_user.passwordconfirm" placeholder="confirmation" required></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><input id="registration_form_submit" type="submit" value="Register!"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div ng-show="registration_success.status">
+                    <p>You have successfully registered!</p>
+                    <p>Welcome to MUNCH.</p>
+                    <button id="register_done" ng-click="redisplayForm()">OK</button>
+                </div>
             </div>
         </div>
     </div>

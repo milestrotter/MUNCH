@@ -37,7 +37,6 @@ munch.controller('Registration',function($scope,CustomerFactory){
 		$scope.tab_clickable=false;
 	}
 	$scope.user_type=function(user_type){
-		console.log('user_type');
 		CustomerFactory.selectUserType(user_type);
 	}
 });
@@ -61,4 +60,10 @@ munch.controller('DashboardMessages',function($scope,CustomerFactory){
 	CustomerFactory.getDashboardSpecials(function(data){
 		$scope.dashboard_specials=data;
 	});
+});
+munch.controller('Profile',function($scope,CustomerFactory){
+	$scope.profile_save=function(id,password){
+		CustomerFactory.editProfile($scope.logged_in_user,password,function(data){
+		});
+	}
 });

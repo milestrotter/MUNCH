@@ -90,13 +90,13 @@ munch.factory('CustomerFactory',function($http){
 
 	factory.getNavBar=function(){
 		if(logged_in_user.account_type=='team'){
-			return {schedule:false,menu:true,tables:true,kitchen:true,tips:false,inventory:false,personelle:false,settings:true};
+			return {schedule:false,menu:true,tables:true,kitchen:true,tips:false,inventory:false,personelle:false,profile:true};
 		}
 		if(logged_in_user.account_type=='personal'){
-			return {schedule:true,menu:true,tables:false,kitchen:false,tips:true,inventory:false,personelle:false,settings:true};
+			return {schedule:true,menu:true,tables:false,kitchen:false,tips:true,inventory:false,personelle:false,profile:true};
 		}
 		if(logged_in_user.account_type=='mgmt'){
-			return {schedule:false,menu:true,tables:false,kitchen:false,tips:false,inventory:true,personelle:true,settings:true};
+			return {schedule:false,menu:true,tables:false,kitchen:false,tips:false,inventory:true,personelle:true,profile:true};
 		}
 	}
 	factory.getDashboardMessages=function(callback){
@@ -107,7 +107,6 @@ munch.factory('CustomerFactory',function($http){
 		return dashboard_messages;
 	}
 	factory.getDashboardSpecials=function(callback){
-		console.log('getDashboardSpecials');
 		$http.get('/getDashboardSpecials.json').success(function(output){
 			dashboard_specials=output;
 			callback(dashboard_specials);
@@ -115,6 +114,16 @@ munch.factory('CustomerFactory',function($http){
 		return dashboard_specials;
 	}
 
+
+	//PROFILE
+	factory.editProfile=function(user_new_info,password,callback){
+		console.log(user_new_info,password);
+		$http.post('/editProfile.json',[logged_in_user,password]).success(function(output){
+			logged_in_user=output;
+			callback(logged_in_user);
+		});
+		return logged_in_user;
+	}
 
 
 	return factory;
