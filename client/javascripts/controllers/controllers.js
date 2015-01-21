@@ -12,7 +12,7 @@ munch.controller('LoginIntro',function($scope,CustomerFactory){
 				console.log('got an error when logging in!');
 			}else{
 				$scope.logged_in_user=data;
-				console.log($scope.logged_in_user);
+				console.log('controller',$scope.logged_in_user);
 			}
 		});
 	}
@@ -49,10 +49,12 @@ munch.controller('schedules',function($scope, ScheduleFactory){
 	})
 });
 munch.controller('DashboardNavbar',function($scope,CustomerFactory){
-	$scope.navbar_show=CustomerFactory.getNavBar();
+	CustomerFactory.getLoggedInUserDB(function(data){
+		$scope.logged_in_user=data;
+		$scope.navbar_show=CustomerFactory.getNavBar();
+	});
 });
 munch.controller('DashboardMessages',function($scope,CustomerFactory){
-	$scope.dashboard_username=CustomerFactory.getLoggedInUser();
 	CustomerFactory.getDashboardMessages(function(data){
 		$scope.dashboard_messages=data;
 	});

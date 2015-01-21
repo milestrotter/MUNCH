@@ -26,7 +26,7 @@ body{
 	#home,#logout{
 		width: 188px;
 		position: fixed;
-		top: 92.5%;
+		top: 93.5%;
 		border-top: solid black 2px;
 	}
 	#home{

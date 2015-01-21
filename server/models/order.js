@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var OrderSchema = new mongoose.Schema({
 	name: String,
 	description: String,
+	index: Number, 
 	notes: {
 		priority: Boolean,
 		custom: Boolean,
@@ -10,7 +11,8 @@ var OrderSchema = new mongoose.Schema({
 		notes: String,
 	},
 	price: String,
-	qty: Number
+	qty: Number,
+	date: Date
 });
 
 // OrderSchema.path('name').required(true, 'Schedule name cannot be blank');

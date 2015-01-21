@@ -45,7 +45,7 @@
                                     <option>4</option>
                                     <option>5</option>
                                 </select>
-                            <button class='btn btn-primary submit' ng-click="newOrder([item.name, order.qty, $index, order.notes, index.note])">Add to Order</button>
+                            <button class='btn btn-primary submit' ng-click="newOrder(item.name, item.description, $index, notes, index.note, item.price, order.qty)">Add to Order</button>
                             </td>
                         </tr>
                 </tbody>

@@ -19,6 +19,10 @@
         io.on('info', function(msg) {
             console.log("Received 'info' event as well as the following message:", msg);
         });
+        $(document).on('click','#go_to_dashboard',function(){
+            io.emit('user_logged_in',logged_in_user);
+        });
+
         $(document).ready(function(){
             var random_num=Math.floor(Math.random()*3);
             if(random_num==0){
