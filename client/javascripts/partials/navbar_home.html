@@ -1,5 +1,5 @@
 	<div id="dashboard_main" class="nestled" ng-controller="DashboardMessages">
-		<h1>WELCOME {{dashboard_username.username}}</h1>
+		<h1>WELCOME {{logged_in_user.username}}</h1>
 		<h2>Messages</h2>
 		<ul>
 			<li ng-repeat="dashboard_message in dashboard_messages">{{dashboard_message.message}}</li>

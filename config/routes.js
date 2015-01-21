@@ -16,10 +16,11 @@ module.exports = function Routes(app) {
     app.get('/dashboard',                   function(request, response) { users.goToDashboard(request, response) });
     //REGISTRATION
     app.post('/makeNewUser.json',           function(request, response) { users.makeNewUser(request, response) });
-
+    app.get('/getLoggedInUserDB.json',      function(request, response) { users.getLoggedInUserDB(request, response) });
     //DASHBOARD
     app.get('/getDashboardMessages.json',   function(request, response) { users.getDashboardMessages(request, response) });
     app.get('/getDashboardSpecials.json',   function(request, response) { users.getDashboardSpecials(request, response) });
+    app.get('/getLoggedInUserDB.json',      function(request, response) { users.getLoggedInUserDB(request, response) });
 
 //-----------------------------Chris-----------------------------
     app.get('/schedules',                   function(request, response) { main.index(request, response) });
@@ -39,7 +40,7 @@ module.exports = function Routes(app) {
         console.log('A new user connected.');
 
         // sending a message to just that person
-        request.io.emit('info', { msg: 'The world is round, there is no up or down.' });
+        request.io.emit('info', { msg: 'Took a lot of tryin just to get up that hill' });
 
         // broadcasting to everyone
         app.io.broadcast('global_event', { msg: 'hello' });
@@ -50,5 +51,9 @@ module.exports = function Routes(app) {
         // listening for an event
         app.io.route('my other event', function(data) { console.log("Received 'my other event' :", data); });  
         app.io.route('disconnect',  function() { app.io.broadcast('user disconnected'); });
+    });
+    app.io.route('user_logged_in',function(request){
+        console.log('got to user_logged_in:',request.data);
+
     });
 };

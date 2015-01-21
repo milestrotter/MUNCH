@@ -15,6 +15,13 @@
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript">
+
+    var io = io.connect();
+    io.emit('client_ready');
+    io.on('info', function(msg) {
+        console.log("Received 'info' event as well as the following message:", msg);
+    });
+
     $(document).ready(function(){
     	$('.dashboard_navbar_tab').css('opacity','0');
     	$('.dashboard_navbar_tab').animate({'opacity':'1'},1000);
@@ -38,18 +45,20 @@
         $(document).on('click','.dashboard_navbar_tab',function(){
         	$('.dashboard_navbar_tab *').stop(true,true);
         	$('#empty_box').hide();
-    		$('#dashboard_navbar').css('margin-top','580px');
-    		$('.dashboard_navbar_tab').find('h2').css('top','-740px');
+        	$('#dashboard_partials').css('width','100%');
+    		$('#dashboard_navbar').css('top','90%');
+    		$('.dashboard_navbar_tab').find('h2').css('top','-97%');
         });
         $(document).on('click','#home',function(){
         	$('#empty_box').show();
-        	$('.dashboard_navbar_tab').find('h2').css('top','-400px');
-        	$('#dashboard_navbar').css('margin-top','0px');
+        	$('#dashboard_partials').css('width','500px');
+        	$('.dashboard_navbar_tab').find('h2').css('top','-53%');
+        	$('#dashboard_navbar').css('top','0%');
         });
     </script>
 </head>
-<body ng-app="munch">
-	<div id="dashboard_navbar" class="nestled" ng-controller="DashboardNavbar">
+<body ng-app="munch" ng-controller="DashboardNavbar">
+	<div id="dashboard_navbar" class="nestled">
 		<div>
 			<div id="dashboard_navbar_schedule" class="dashboard_navbar_tab nestled" ng-show="navbar_show.schedule" onclick="location.href='/schedules'">
 				<div></div>
