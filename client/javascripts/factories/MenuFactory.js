@@ -1,5 +1,6 @@
 munch.factory('MenuFactory', function($http){
 	var menus = [];
+	var orders = [];
 	var factory = {};
 	factory.getMenu = function (callback){
 		console.log("I am in the getMenu factory");
@@ -22,11 +23,18 @@ munch.factory('MenuFactory', function($http){
 			}
 		}
 	}
-	// factory.getShift = function(callback){
-	// 	$http.get('/getShift.json').success(function(output){
-	// 		shifts = output;
-	// 		callback(shifts);
-	// 	})
-	// }
+	factory.newOrder = function(name, description, index, notes, note, price, qty, callback){
+		// console.log("this is my data", data);
+		var d = new Date();
+		data = {name: name, description: description, index: index, notes: { priority: notes[0], custom: notes[1], allergy: notes[2], notes: note}, price: price, qty: qty, date: d}
+		orders.push(data);
+		console.log(data);
+		// console.log(orders);
+		$http.post('/newOrder.json', data).success(data, function(output){
+			// console.log("hello");
+			order = output;
+			callback(order);
+		})
+	}
 	return factory;
 })
