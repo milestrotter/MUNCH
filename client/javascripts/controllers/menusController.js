@@ -1,3 +1,7 @@
+munch.run(function(editableOptions) {
+  editableOptions.theme = 'bs3';
+});
+
 munch.controller('menusController', function($scope, $filter, $http, MenuFactory){
 	$scope.menus = MenuFactory.getMenu(function(data){
 		// console.log("i am here in the client controller")
@@ -21,12 +25,29 @@ munch.controller('menusController', function($scope, $filter, $http, MenuFactory
 		});
 
 	}
-	$scope.updateMenu = function(name, description, price){
-		console.log(name, description, price);
-		// $scope.order = MenuFactory.newOrder(name, description, price, function(data){
-		// 	mydata = data;
-		// 	console.log(mydata);
-		// });
+	$scope.newItem = function(name, description, price){
+		// console.log(name, description, price);
+		$scope.item = MenuFactory.newItem(name, description, price, function(data){
+			mydata = data;
+			console.log(mydata);
+		});
+
+	}
+	$scope.removeItem = function(object){
+		// console.log(name, description, price);
+		// console.log(object);
+		$scope.item = MenuFactory.removeItem(object, function(data){
+			mydata = data;
+			console.log(mydata);
+		});
+
+	}
+	$scope.updateMenu = function(object){
+		// console.log(name, description, price);
+		$scope.item = MenuFactory.updateItem(object, function(data){
+			mydata = data;
+			console.log(mydata);
+		});
 
 	}
 	$scope.setOutputs = function(index, value){

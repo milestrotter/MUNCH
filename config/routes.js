@@ -8,33 +8,36 @@ var menu = require('../server/controllers/menu.js');
 //  load other controllers here
 
 module.exports = function Routes(app) {
-    app.get('/',                                function(request, response) { users.index(request, response) });
+    app.get('/',                                function(req, res) { users.index(req, res) });
 //-----------------------------Ulysses-----------------------------
     //LOGIN
-    //Needs to be .post for request.body to work
-    app.post('/login',                          function(request, response) { users.login(request, response) });
-    app.get('/dashboard',                       function(request, response) { users.goToDashboard(request, response) });
+    //Needs to be .post for req.body to work
+    app.post('/login',                          function(req, res) { users.login(req, res) });
+    app.get('/dashboard',                       function(req, res) { users.goToDashboard(req, res) });
     //REGISTRATION
-    app.post('/makeNewUser.json',               function(request, response) { users.makeNewUser(request, response) });
+    app.post('/makeNewUser.json',               function(req, res) { users.makeNewUser(req, res) });
 
     //DASHBOARD
-    app.get('/getDashboardMessages.json',       function(request, response) { users.getDashboardMessages(request, response) });
-    app.get('/getDashboardSpecials.json',       function(request, response) { users.getDashboardSpecials(request, response) });
+    app.get('/getDashboardMessages.json',       function(req, res) { users.getDashboardMessages(req, res) });
+    app.get('/getDashboardSpecials.json',       function(req, res) { users.getDashboardSpecials(req, res) });
 
 //-----------------------------Chris-----------------------------
-    app.get('/schedules',                       function(request, response) { main.index(request, response) });
-    app.get('/getSchedule.json',                function(request,response)  { main.getSchedule(request,response) });
-    app.get('/getShift.json',                   function(request,response)  { main.getShift(request,response) });
-    app.get('/getTips.json',                    function(request,response)  { main.getTips(request,response) });
+    app.get('/schedules',                       function(req, res) { main.index(req, res) });
+    app.get('/getSchedule.json',                function(req,res)  { main.getSchedule(req,res) });
+    app.get('/getShift.json',                   function(req,res)  { main.getShift(req,res) });
+    app.get('/getTips.json',                    function(req,res)  { main.getTips(req,res) });
     
-    app.post('/removeSchedule.json',            function(request,response)  { main.removeSchedule(request,response) });
-    app.post('/takeShift.json',                 function(request,response)  { main.takeShift(request,response) });
-    app.post('/addTip.json',                    function(request,response)  { main.addTip(request,response) });
+    app.post('/removeSchedule.json',            function(req,res)  { main.removeSchedule(req,res) });
+    app.post('/takeShift.json',                 function(req,res)  { main.takeShift(req,res) });
+    app.post('/addTip.json',                    function(req,res)  { main.addTip(req,res) });
 //-----------------------------Miles-----------------------------
-    app.get('/menu',                            function(request, response) { menu.index(request, response) });
-    app.get('/getMenu',                         function(request, response) { menu.getMenu(request, response) });
-    app.post('/newOrder.json',                  function(request, response) { menu.newOrder(request, response) });
-    app.get('/mgr',                             function(request, response) { menu.mgr(request, response) });
+    app.get('/menu',                            function(req, res) { menu.index(req, res) });
+    app.get('/getMenu',                         function(req, res) { menu.getMenu(req, res) });
+    app.post('/newOrder.json',                  function(req, res) { menu.newOrder(req, res) });
+    app.get('/mgr',                             function(req, res) { menu.mgr(req, res) });
+    app.post('/newItem.json',                   function(req, res) { menu.newItem(req, res) });
+    app.post('/removeItem.json',                function(req, res) { menu.removeItem(req, res) });
+    app.post('/updateItem.json',                function(req, res) { menu.updateMenu(req, res) });
 
     app.io.route('client_ready',    function(request) {
         console.log('A new user connected.');

@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
-
+var d=new Date();
 var MenuSchema = new mongoose.Schema({
 	name: String,
 	description: String,
-	price: String
+	price: String,
+	date: {type: Date, default: d }
 });
 
 MenuSchema.path('name').required(true, 'Schedule name cannot be blank');

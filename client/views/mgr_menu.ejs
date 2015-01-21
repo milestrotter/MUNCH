@@ -29,22 +29,22 @@
                 </thead>
                 <tbody>
                         <tr ng-repeat="item in items">
-                            <form>
-                                <td ng-model="index.name"><a href="#" editable-text="item.name">{{ item.name || 'empty' }}</a></td>
-                                <td ng-model="index.description"><a href="#" editable-textarea="item.description">{{ item.description || 'empty' }}</a></td>
-                                <td ng-model='order.price'>
-                                    <a href="#" editable-text="item.price">{{ item.price || 'empty' }}</a>
-                                    <button class='btn btn-danger submit' ng-click="removeItem(item.name, item.description, $index, item.price)">Remove</button>
-                                    <button class='btn btn-primary submit' ng-click="updateMenu(item.name, item.description, item.price)">Update</button>
+                            <form editable-form name="editableForm" onaftersave="saveUser()">
+                                <td ng-model="index.name"><span editable-text="item.name" e-name="name" onbeforesave="checkName($data)" e-required>{{ item.name || 'empty' }}</span></td>
+                                <td ng-model="index.description"><span editable-textarea="item.description" e-name="name" onbeforesave="checkName($data)" e-required>{{ item.description || 'empty' }}</span></td>
+                                <td ng-model='index.price'>
+                                    <span editable-text="item.price" e-name="name" onbeforesave="checkName($data)" e-required>{{ item.price || 'empty' }}</span>
+                                    <button class='btn btn-danger submit' ng-click="removeItem(item)">Remove</button>
+                                    <button class='btn btn-primary submit' ng-click="updateMenu(item)">Update</button>
                                 </td>
                             </form>
                         </tr>
                         <tr>
-                            <td ng-model="item.name"><input type='text' value='{{item.name}}'></td>
-                            <td ng-model="order.description"><input type='text' value='{{item.description}}'></td>
-                            <td ng-model='order.price'>
-                                <input type='text' value='{{item.price}}'>
-                                <button class='btn btn-primary submit' ng-click="newOrder(item.name, item.description, $index, notes, index.note, item.price, order.qty)">Add Item</button>
+                            <td><input type='text' ng-model="new.name"></td>
+                            <td><input type='text' ng-model="new.description"></td>
+                            <td>
+                                <input type='text' ng-model='new.price'>
+                                <button class='btn btn-primary submit' ng-click="newItem(new.name, new.description, new.price)">Add Item</button>
                             </td>
                         </tr>
                 </tbody>
