@@ -3,6 +3,12 @@ munch.run(function(editableOptions) {
 });
 
 munch.controller('menusController', function($scope, $filter, $http, MenuFactory){
+	
+	$scope.user = MenuFactory.getLoggedInUserDB(function(data){
+		$scope.logged_in_user = data;
+		console.log("This is the data: ", $scope.logged_in_user.account_type);
+	});
+
 	$scope.menus = MenuFactory.getMenu(function(data){
 		// console.log("i am here in the client controller")
 	 	$scope.items = data;
@@ -10,12 +16,7 @@ munch.controller('menusController', function($scope, $filter, $http, MenuFactory
 	 		"notes": ['Priority', 'Custom', 'Allergy']
 	 	};
 		$scope.notes = {};
-
-		$scope.user = {
-		  name: 'awesome user'
-		};
-
-	 	console.log($scope.items, $scope.inputs, $scope.notes);
+	 	// console.log($scope.items, $scope.inputs, $scope.notes);
 	});
 	$scope.newOrder = function(name, description, index, notes, note, price, qty){
 		// console.log(data);
@@ -62,11 +63,8 @@ munch.controller('menusController', function($scope, $filter, $http, MenuFactory
 		};
 		// console.log($scope.notes, $scope.showNote);
 	}
-	$scope.user = {
-    id: 1,
-    name: 'awesome user',
-    status: 2,
-    group: 4,
-    groupName: 'admin'
-  };
+	$scope.logout = function(){
+		$scope.logged_in_user = {};
+		return $scope.logged_in_user;
+	}
 });
