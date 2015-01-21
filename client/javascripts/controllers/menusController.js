@@ -1,4 +1,4 @@
-munch.controller('menusController', function($scope, MenuFactory){
+munch.controller('menusController', function($scope, $filter, $http, MenuFactory){
 	$scope.menus = MenuFactory.getMenu(function(data){
 		// console.log("i am here in the client controller")
 	 	$scope.items = data;
@@ -6,6 +6,10 @@ munch.controller('menusController', function($scope, MenuFactory){
 	 		"notes": ['Priority', 'Custom', 'Allergy']
 	 	};
 		$scope.notes = {};
+
+		$scope.user = {
+		  name: 'awesome user'
+		};
 
 	 	console.log($scope.items, $scope.inputs, $scope.notes);
 	});
@@ -37,4 +41,11 @@ munch.controller('menusController', function($scope, MenuFactory){
 		};
 		// console.log($scope.notes, $scope.showNote);
 	}
+	$scope.user = {
+    id: 1,
+    name: 'awesome user',
+    status: 2,
+    group: 4,
+    groupName: 'admin'
+  };
 });

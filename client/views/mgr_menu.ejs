@@ -6,9 +6,11 @@
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/xeditable.css" />
+    <script type="text/javascript" src="../javascripts/xeditable.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="/stylesheets/menu.css" />
     <script type="text/javascript">
-        var munch = angular.module('munch', ['ngRoute']);
+        var munch = angular.module('munch', ['ngRoute', 'xeditable']);
 
 
     </script>
@@ -27,13 +29,15 @@
                 </thead>
                 <tbody>
                         <tr ng-repeat="item in items">
-                            <td ng-model="index.name"><input type='text' value='{{item.name}}'></td>
-                            <td ng-model="index.description"><textarea>{{item.description}}</textarea></td>
-                            <td ng-model='order.price'>
-                                <input type='text' value='{{item.price}}'>
-                                <button class='btn btn-danger submit' ng-click="removeItem(item.name, item.description, $index, item.price)">Remove</button>
-                                <button class='btn btn-primary submit' ng-click="updateMenu(item.name, index.description, index.price)">Update</button>
-                            </td>
+                            <form>
+                                <td ng-model="index.name"><a href="#" editable-text="item.name">{{ item.name || 'empty' }}</a></td>
+                                <td ng-model="index.description"><a href="#" editable-textarea="item.description">{{ item.description || 'empty' }}</a></td>
+                                <td ng-model='order.price'>
+                                    <a href="#" editable-text="item.price">{{ item.price || 'empty' }}</a>
+                                    <button class='btn btn-danger submit' ng-click="removeItem(item.name, item.description, $index, item.price)">Remove</button>
+                                    <button class='btn btn-primary submit' ng-click="updateMenu(item.name, item.description, item.price)">Update</button>
+                                </td>
+                            </form>
                         </tr>
                         <tr>
                             <td ng-model="item.name"><input type='text' value='{{item.name}}'></td>
@@ -45,6 +49,7 @@
                         </tr>
                 </tbody>
             </table>
+            
         <div class='footer'>
             <a href="/"><button class='btn btn-warning logout'>Logout</button></a>
         </div>
