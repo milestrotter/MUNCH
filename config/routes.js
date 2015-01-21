@@ -46,10 +46,10 @@ module.exports = function Routes(app) {
     app.get('/menu',                            function(request, response) { menu.index(request, response) });
     app.get('/getMenu',                         function(request, response) { menu.getMenu(request, response) });
     app.post('/newOrder.json',                  function(request, response) { menu.newOrder(request, response) });
-    app.get('/mgr',                             function(request, response) { menu.mgr(request, response) });
     app.post('/newItem.json',                   function(request, response) { menu.newItem(request, response) });
     app.post('/removeItem.json',                function(request, response) { menu.removeItem(request, response) });
     app.post('/updateItem.json',                function(request, response) { menu.updateMenu(request, response) });
+    app.get('/logout',                          function(req, res) { users.index(req, res) });
 
     app.io.route('client_ready',    function(request) {
         // sending a message to just that person

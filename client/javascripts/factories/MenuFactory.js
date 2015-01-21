@@ -1,7 +1,16 @@
 munch.factory('MenuFactory', function($http){
 	var menus = [];
 	var orders = [];
+	var logged_in_user = {};
 	var factory = {};
+
+	factory.getLoggedInUserDB=function(callback){
+		$http.get('/getLoggedInUserDB.json').success(function(output){
+			logged_in_user = output;
+			callback(logged_in_user);
+		});
+		return logged_in_user
+	}
 	factory.getMenu = function (callback){
 		console.log("I am in the getMenu factory");
 		$http.get('/getMenu').success(function(output){

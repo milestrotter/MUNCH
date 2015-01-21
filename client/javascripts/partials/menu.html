@@ -1,4 +1,40 @@
-	<div id="dashboard_main" class="nestled" ng-controller="DashboardMessages">
-		<h1>{{dashboard_username.username}}</h1>
-		<h2>Menu</h2>
-	</div>
+<div class='container' ng-controller='menusController'>
+    <h1>This is the menu</h1>
+    <div class='col-sm-12'>
+        <table class='table table-striped table-condensed'>
+            <thead>
+                <th>Menu Item</th>
+                <th>Menu Description</th>
+                <th>Notes</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </thead>
+            <tbody>
+                    <tr ng-repeat="item in items">
+                        <td ng-model="item.name"><h4>{{item.name}}</h4></td>
+                        <td ng-model="order.description">{{item.description}}</td>
+                        <td><ul ng-repeat='notes in inputs'>
+                                <li ng-repeat='note in notes'><input type='checkbox' ng-model='order.notes' ng-change="setOutputs($index, note)"> {{note}}</li>
+                            </ul>
+                            <textarea ng-model='index.note' ng-show='showNote'></textarea>
+                        </td>
+                        <td ng-model='order.price'>${{item.price}}</td>
+                        <td><select class='form-control' ng-model='order.qty'>
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        <button class='btn btn-primary submit' ng-click="newOrder(item.name, item.description, $index, notes, index.note, item.price, order.qty)">Add to Order</button>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+    <div class='footer'>
+        <a href="/"><button class='btn btn-warning logout'>Logout</button></a>
+        <a href="/mgr"><button class='btn btn-warning logout'>Edit as Manager</button></a>
+    </div>
+</div>
+</div>

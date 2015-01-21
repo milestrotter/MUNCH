@@ -1,5 +1,5 @@
 //Handles routing among partials and home
-var munch=angular.module('munch',['ngRoute']);
+var munch=angular.module('munch',['ngRoute', 'xeditable']);
 munch.config(function($routeProvider){
 	$routeProvider
 		.when('/',
@@ -14,10 +14,10 @@ munch.config(function($routeProvider){
 			{
 				templateUrl:'javascripts/partials/schedule.html'
 			})
-		.when('/menu',
-			{
-				templateUrl:'javascripts/partials/menu.html'
-			})
+		// .when('/menu',
+		// 	{
+		// 		templateUrl:'javascripts/partials/menu.html'
+		// 	})
 		.when('/tables',
 			{
 				templateUrl:'javascripts/partials/tables.html'

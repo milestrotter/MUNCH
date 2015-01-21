@@ -3,34 +3,14 @@ var Menu = mongoose.model('Menu');
 var Order = mongoose.model('Order');
 
 module.exports = {
-	index: function(req, res) {
-		// Menu.remove({}, function(err, results) {});
-		// Menu.create({
-  //               name: "Chicken",
-		// 		description: "A standard chicken",
-		// 		price: "13"
-  //           },
-  //           {
-  //               name: "Steak",
-  //               description: "The best steak",
-  //               price: "25"
-  //           },
-  //           {
-  //               name: "Salad",
-  //               description: "It's a salad... what do you expect?",
-  //               price: "12"
-  //           },
-  //           {
-  //               name: "Fish",
-  //               description: "A subpar fish",
-  //               price: "16"
-  //           });  
+	  index: function(req, res) { 
+        // console.log("This is the req: ", req);
         res.render('../../client/views/menu',{ title: 'MENU' });
     },
     getMenu: function(req, res){
         Menu.find({}, function(err, results) {
             // console.log('here in the index json controller now!!');
-            console.log('results: ', results)
+            // console.log('results: ', results)
             res.send(JSON.stringify(results));
         });
     },
@@ -64,11 +44,13 @@ module.exports = {
     updateMenu: function(req, res){
         console.log("*********************************");
         console.log(req.body._id);
-        Menu.update((req.body._id, { $set: req.body }), function(err, results){
+        query = req.body._id;
+        Menu.update({ _id: query }, { $set: req.body }, function(err, db_data){
             if (err) {
                 res.send(JSON.stringify(err));
             } else {
-                console.log('success: updated item!');
+                console.log('success: updated item: ', db_data);
+                res.send(db_data)
             }
         });
     },
@@ -84,6 +66,5 @@ module.exports = {
                 console.log('success: created new Order');
             }
         });
-// {_id: req.body._id}
     },
 }
