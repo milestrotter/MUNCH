@@ -40,6 +40,6 @@ module.exports = {
     },
     addTip: function(request, response){
         Tip.create(request.body);
-        console.log('Added new tip to the database');
+        console.log('Added new tip to the database', request.body);
     }
 }
