@@ -1,11 +1,17 @@
-	<div id="dashboard_main" class="nestled" ng-controller="DashboardMessages">
-		<h1>WELCOME {{logged_in_user.username}}</h1>
-		<h2>Messages</h2>
-		<ul>
-			<li ng-repeat="dashboard_message in dashboard_messages">{{dashboard_message.message}}</li>
-		</ul>
-		<h2>Specials of the Day</h2>
-		<ul>
-			<li ng-repeat="dashboard_special in dashboard_specials">{{dashboard_special.item}}: {{dashboard_special.description}}</li>
-		</ul>
+<div id="dashboard_main" class="nestled" ng-controller="DashboardMessages">
+	<h1>WELCOME {{logged_in_user.username}}</h1>
+	<h2>Messages</h2>
+	<ul>
+		<li ng-repeat="dashboard_message in dashboard_messages">{{dashboard_message.message}}</li>
+	</ul>
+	<h2>Specials of the Day</h2>
+	<ul>
+		<li ng-repeat="dashboard_special in dashboard_specials">{{dashboard_special.item}}: {{dashboard_special.description}}</li>
+	</ul>
+	<h2>Chalkboard</h2>
+	<div id="scribbles">
+		<!-- {{chalkboard_messages}} -->
+		<!-- <p ng-repeat="chalkboard_message in chalkboard_messages"><span class="scribble_username bold">{{chalkboard_message.username}}</span><span class="scribble_message"> | {{chalkboard_message.message}}</span><span class="scribble date"> [{{chalkboard_message.date}}]</span></p> -->
 	</div>
+	<textarea id="chalkboard" ng-model="new_scribble" class="nestled"></textarea><div id="chalkboard_button_wrapper" class="nestled"><button id="chalkboard_clear">Clear</button><button id="chalkboard_submit" ng-click="chalkboard_submit(new_scribble)">Scribble!</button></div>
+</div>

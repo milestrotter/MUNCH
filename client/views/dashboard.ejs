@@ -17,11 +17,25 @@
     <script type="text/javascript">
 
     var io = io.connect();
-    io.emit('client_ready');
-    io.on('sending_logged_in_user', function(msg) {
-        console.log("message:", msg);
+    io.emit('new_screen',{msg:'read to get existing messages'});
+    io.on('sent_existing',function(existing_messages){
+    	console.log(existing_messages);
+    	for(message in existing_messages){
+    		$('#scribbles').append('<p><span class="scribble_username bold">'+existing_messages[message].username+'</span><span class="scribble_message"> | '+existing_messages[message].message+'</span><span class="scribble date"> ['+existing_messages[message].date+']</span></p>');
+    	}
     });
-
+    io.on('scribble_everyone',function(scribble_received){
+		$('#scribbles').append('<p><span class="scribble_username bold">'+scribble_received.username+'</span><span class="scribble_message"> | '+scribble_received.message+'</span><span class="scribble date"> ['+scribble_received.date+']</span></p>');
+    });
+    $(document).on('click','#chalkboard_clear',function(){
+    	$('#chalkboard').val('');
+    });
+    $(document).on('click','#chalkboard_submit',function(){
+    	var d=new Date();
+    	if($('#chalkboard').val()){
+    		io.emit('chalkboard_submitted',{username:'<%= username %>',message:$('#chalkboard').val(),date:d.getHours()+':'+d.getMinutes()});
+    	}
+    });
     $(document).ready(function(){
     	$('.dashboard_navbar_tab').css('opacity','0');
     	$('.dashboard_navbar_tab').animate({'opacity':'1'},1000);

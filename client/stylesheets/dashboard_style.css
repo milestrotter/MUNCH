@@ -9,6 +9,9 @@ body{
 	background-repeat: no-repeat;
 	/*background-position: 0px 100px;*/
 }
+	.bold{
+		font-weight: bolder;
+	}
 	.neon_green{
 		color: RGB(127,226,46);
 	}
@@ -37,6 +40,9 @@ body{
 		border-color: white;
 		color: white;
 	}
+	#home,#logout{
+		background-color: rgba(25,38,31,0.7);
+	}
 	#home{
 		left: 784px;
 	}
@@ -49,8 +55,10 @@ body{
 	}
 	#dashboard_partials{
 		width: 500px;
+		/*height: 90%;*/
 		margin: 20px;
 		background-color: white;
+		overflow: scroll;
 	}
 	#dashboard_main{
 		margin: 20px;
@@ -148,6 +156,25 @@ body{
 				background-position: 0px 0px;
 			}
 
+/*NAVBAR HOME*/
+#scribbles{
+	width: 400px;
+}
+#chalkboard{
+	width: 80%;
+	height: 50px;
+}
+#chalkboard_button_wrapper{
+	width: 18%;
+}
+	#chalkboard_clear,#chalkboard_submit{
+		width: 100%;
+	}
+
+/*PERSONELLE PARTIAL STYLING*/
+#personelle_employees_list{
+	padding-bottom: 80px;
+}
 
 /*PROFILE PARTIAL STYLING*/
 #profile_table input{

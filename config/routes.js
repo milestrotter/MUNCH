@@ -5,6 +5,8 @@ var users = require('../server/controllers/users.js');
 var main = require('../server/controllers/main.js');
 //Miles
 var menu = require('../server/controllers/menu.js');
+
+var all_messages=[{username:'Adam',message:'where are those hot dogs??',date:'[12:22]'}];
 //  load other controllers here
 
 module.exports = function Routes(app) {
@@ -22,8 +24,13 @@ module.exports = function Routes(app) {
     app.get('/getDashboardMessages.json',   function(request, response) { users.getDashboardMessages(request, response) });
     app.get('/getDashboardSpecials.json',   function(request, response) { users.getDashboardSpecials(request, response) });
     app.get('/getLoggedInUserDB.json',      function(request, response) { users.getLoggedInUserDB(request, response) });
+    app.get('/getChalkboardMessages.json',      function(request, response) { users.getChalkboardMessages(request, response) });
+    app.post('/makeNewScribble.json',           function(request, response) { users.makeNewScribble(request, response) }); 
     //PROFILE
     app.post('/editProfile.json',           function(request, response) { users.editProfile(request, response) });
+    //PERSONELLE
+    app.get('/getPersonelle.json',      function(request, response) { users.getPersonelle(request, response) });
+    app.post('/removePersonelle.json',           function(request, response) { users.removePersonelle(request, response) });
 //-----------------------------Chris-----------------------------
     app.get('/schedules',                       function(request, response) { main.index(request, response) });
     app.get('/getSchedule.json',                function(request,response)  { main.getSchedule(request,response) });
@@ -51,15 +58,15 @@ module.exports = function Routes(app) {
         // listening for an event
         app.io.route('my other event', function(data) { console.log("Received 'my other event' :", data); });  
         app.io.route('disconnect',  function() { app.io.broadcast('user disconnected'); });
-
-
-        // app.io.route('user_logged_in', function(data){
-        //     console.log("SUCCESS!!!' :", data);
-        // });
-        // console.log('got to user_logged_in:',request.data);
-        // app.io.broadcast('sending_logged_in_user', { msg: 'Did you get this?' });
     });
-    app.io.route('user_logged_in',function(request){
-        console.log('this is dumb',request.data);
+
+    app.io.route('new_screen',function(request){
+        console.log('new_screen: ',all_messages);
+        request.io.emit('sent_existing',all_messages);
+    });
+    app.io.route('chalkboard_submitted',function(request){
+        all_messages.push(request.data);
+        console.log('chalkboard_submitted',request.data);
+        app.io.broadcast('scribble_everyone',request.data);
     });
 };

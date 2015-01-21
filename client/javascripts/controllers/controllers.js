@@ -55,10 +55,28 @@ munch.controller('DashboardMessages',function($scope,CustomerFactory){
 	CustomerFactory.getDashboardSpecials(function(data){
 		$scope.dashboard_specials=data;
 	});
+	CustomerFactory.getChalkboardMessages(function(data){
+		$scope.chalkboard_messages=data;
+	});
+	// $scope.chalkboard_messages=CustomerFactory.showChalkboardMessages();
+	$scope.chalkboard_submit=function(new_scribble){
+		CustomerFactory.makeNewScribble(new_scribble);
+	}
 });
 munch.controller('Profile',function($scope,CustomerFactory){
 	$scope.profile_save=function(id,password){
 		CustomerFactory.editProfile($scope.logged_in_user,password,function(data){
 		});
+	}
+});
+
+
+//PERSONELLE
+munch.controller('Personelle',function($scope,CustomerFactory){
+	CustomerFactory.getPersonelle(function(data){
+		$scope.personelle_employees=data;
+	});
+	$scope.personelle_dismiss=function(){
+		CustomerFactory.removePersonelle();
 	}
 });

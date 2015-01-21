@@ -19,7 +19,7 @@
         io.on('info', function(msg) {
             console.log("Received 'info' event as well as the following message:", msg);
         });
-        io.emit('user_logged_in',{user:'abcd'});
+        io.emit('user_logged_in',{user:'LOGIN PAGE'});
 
         $(document).ready(function(){
             var random_num=Math.floor(Math.random()*3);

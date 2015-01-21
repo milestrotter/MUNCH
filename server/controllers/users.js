@@ -4,21 +4,25 @@ var mongoose = require('mongoose')
 var User = mongoose.model('User');
 var DashboardMessage = mongoose.model('DashboardMessage');
 var DashboardSpecial = mongoose.model('DashboardSpecial');
+var ChalkboardMessage = mongoose.model('ChalkboardMessage');
 
 var logged_in_user = {};
 
 module.exports = {
     index: function(request, response) {
-        User.remove({},function(err,removed){
-        });
-        DashboardMessage.remove({},function(err,removed){
-        });
-        DashboardSpecial.remove({},function(err,removed){
-        });
+        //Clear out all dbs at start
+        User.remove({},function(err,removed){});
+        DashboardMessage.remove({},function(err,removed){});
+        DashboardSpecial.remove({},function(err,removed){});
+        ChalkboardMessage.remove({},function(err,removed){});
+
+        //Initialize 'users' collection
         var d=new Date();
         d=d.toDateString();
-        //Initialize 'users' collection
         User.create({firstname:'Anders',lastname:'Holmvik',username:'DERS',email:'DJango@yahoo.com',phone:'555-555-5555',password:'1',account_type:'mgmt'});
+        User.create({firstname:'Blake',lastname:'Anderson',username:'BLAKE',email:'poppy@gmail.com',phone:'444-444-4444',password:'2',account_type:'personal'});
+        User.create({firstname:'Adam',lastname:'DeMamp',username:'ADAM',email:'dude@msn.com',phone:'333-333-3333',password:'3',account_type:'personal'});
+        User.create({firstname:'-',lastname:'-',username:'TEAM',email:'team@restaurant.com',phone:'222-222-2222',password:'4',account_type:'team'});
         DashboardMessage.create(
             {message:'Clean up that stuff on the floor, what is that even',username:'BIGBOSS',date:d},
             {message:'Need more beer, now!',username:'BIGBOSS',date:d},
@@ -26,10 +30,13 @@ module.exports = {
         DashboardSpecial.create(
             {item:'Goop',description:'Pretty awful stuff actually'},
             {item:'Cookies',description:'2 cookies baked to mediocrity'});
+        ChalkboardMessage.create({username:'BIGBOSS',message:'No floor cleaning today.'});
+        ChalkboardMessage.create({username:'Carl',message:'Where is that turkey??'});
+        //Render Login/Registration view page
         response.render('../../client/views/login',{ title: 'MUNCH' });
     },
     goToDashboard: function(request, response) {
-        response.render('../../client/views/dashboard',{ title: 'DASHBOARD' });
+        response.render('../../client/views/dashboard',{ title: 'DASHBOARD',username:logged_in_user.username });
     },
     login: function(request, response){
         User.findOne({username:request.body.username.toUpperCase()},function(err,db_found_user){
@@ -64,18 +71,23 @@ module.exports = {
         response.send(logged_in_user);
     },
     getDashboardMessages: function(request, response) {
-        // console.log('got to: getDashboardMessages');
         DashboardMessage.find({},function(err,db_dashboard_messages){
-            // console.log(db_dashboard_messages);
             response.send(db_dashboard_messages);
         });
     },
     getDashboardSpecials: function(request, response) {
-        // console.log('got to: getDashboardSpecials');
         DashboardSpecial.find({},function(err,db_dashboard_specials){
-            // console.log(db_dashboard_specials);
             response.send(db_dashboard_specials);
         });
+    },
+    getChalkboardMessages: function(request, response) {
+        ChalkboardMessage.find({},function(err,db_chalkboard_messages){
+            response.send(db_chalkboard_messages);
+        });
+    },
+    makeNewScribble: function(request, response) {
+        console.log(request.body);
+        ChalkboardMessage.create({username:request.body.username,message:request.body.message,date:request.body.date});
     },
 
 
@@ -87,48 +99,15 @@ module.exports = {
             logged_in_user=db_data;
             response.send(db_data);
         });
+    },
+
+    //PERSONELLE
+    getPersonelle: function(request, response) {
+        User.find({},function(err,all){
+            response.send(all);
+        });
+    },
+    removePersonelle: function(request, response) {
+
     }
 }
-//----------CUSTOMERS----------
-//     getCustomers: function(request,response){
-//         Customer.find(function(err,db_customers){
-//             response.send(db_customers);
-//         });
-//     },
-//     makeNewCustomer: function(request,response){
-//         a = new Customer(request.body);
-//         a.save(function(err) {
-//             if (err) {
-//                 response.send(JSON.stringify(err));
-//             } else {
-//                 console.log('success: created new Customer (person name)');
-//             }
-//         });
-//     },
-//     removeCustomer: function(request,response){
-//         Customer.remove(request.body,function(err,removed){
-//             console.log('removed customer (person name) successfully');
-//         });
-//     },
-
-// //----------ORDERS----------
-//     getOrders: function(request,response){
-//         Order.find(function(err,db_orders){
-//             response.send(db_orders);
-//         });
-//     },
-//     makeNewOrder: function(request,response){
-//         a = new Order(request.body);
-//         a.save(function(err) {
-//             if (err) {
-//                 response.send(JSON.stringify(err));
-//             } else {
-//                 console.log('success: created new Order');
-//             }
-//         });
-//     },
-//     removeOrder: function(request,response){
-//         Order.remove(request.body,function(err,removed){
-//             console.log('removed order successfully');
-//         });
-//     }

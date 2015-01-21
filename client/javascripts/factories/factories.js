@@ -25,6 +25,9 @@ munch.factory('CustomerFactory',function($http){
 	//CHANGE THIS WITH DB
 	var dashboard_specials=[];
 
+	var chalkboard_messages=[];
+
+	var all_personelle=[];
 
 	var factory={};
 
@@ -113,7 +116,23 @@ munch.factory('CustomerFactory',function($http){
 		});
 		return dashboard_specials;
 	}
-
+	factory.getChalkboardMessages=function(callback){
+		$http.get('/getChalkboardMessages.json').success(function(output){
+			chalkboard_messages=output;
+			// console.log(chalkboard_messages);
+			callback(chalkboard_messages);
+		});
+		return chalkboard_messages;
+	}
+	factory.makeNewScribble=function(new_scribble){
+		var d=new Date();
+		chalkboard_messages.push({username:logged_in_user.username,message:new_scribble,date:d.getHours()+':'+d.getMinutes()});
+		$http.post('/makeNewScribble.json',{username:logged_in_user.username,message:new_scribble,date:d.getHours()+':'+d.getMinutes()}).success(function(output){
+		});
+	}
+	// factory.showChalkboardMessages=function(){
+	// 	return chalkboard_messages;
+	// }
 
 	//PROFILE
 	factory.editProfile=function(user_new_info,password,callback){
@@ -125,6 +144,17 @@ munch.factory('CustomerFactory',function($http){
 		return logged_in_user;
 	}
 
-
+	//PERSONELLE
+	factory.getPersonelle=function(callback){
+		$http.get('/getPersonelle.json').success(function(output){
+			all_personelle=output;
+			callback(all_personelle);
+		});
+		return all_personelle;
+	}
+	factory.removePersonelle=function(){
+		$http.post('/removePersonelle.json').success(function(output){
+		});
+	}
 	return factory;
 });
