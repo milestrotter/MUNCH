@@ -82,7 +82,7 @@ munch.factory('CustomerFactory',function($http){
 	}
 
 	factory.getNavBar=function(){
-		var to_show={account_type:'mgmt'};
+		var to_show={account_type:'personal'};
 		if(to_show.account_type=='team'){
 			return {schedule:false,menu:true,tables:true,kitchen:true,tips:false,inventory:false,personelle:false,settings:true};
 		}

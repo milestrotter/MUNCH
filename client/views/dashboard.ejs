@@ -10,6 +10,7 @@
     <script type="text/javascript" src="../javascripts/controllers/controllers.js"></script>
 <!-- Chris -->
 	<link rel="stylesheet" type="text/css" href="/stylesheets/calendarstyle.css" />
+	<link rel="stylesheet" type="text/css" href="/stylesheets/personelle.css" />
     <script type="text/javascript" src="../javascripts/controllers/schedules.js"></script>
     <script type="text/javascript" src="../javascripts/factories/ScheduleFactory.js"></script>
     <script type="text/javascript" src="http://cdn.amcharts.com/lib/3/amcharts.js"></script>
@@ -99,7 +100,7 @@
             });
         });
         $(document).on('click','.dashboard_navbar_tab',function(){
-        	$('#dashboard_partials').width('75%%');
+        	$('#dashboard_partials').css('width, 800px');
         	$('.dashboard_navbar_tab *').stop(true,true);
         	$('#empty_box').hide();
         	$('#dashboard_partials').css('width','100%');
