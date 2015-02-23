@@ -1,5 +1,5 @@
 //Handles routing among partials and home
-var munch=angular.module('munch',['ngRoute', 'xeditable']);
+var munch=angular.module('munch',['ngRoute']);
 munch.config(function($routeProvider){
 	$routeProvider
 		.when('/',

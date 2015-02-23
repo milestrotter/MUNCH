@@ -152,8 +152,8 @@ munch.factory('CustomerFactory',function($http){
 		});
 		return all_personelle;
 	}
-	factory.removePersonelle=function(){
-		$http.post('/removePersonelle.json').success(function(output){
+	factory.removePersonelle=function(personelle_employee){
+		$http.post('/removePersonelle.json',personelle_employee).success(function(output){
 		});
 	}
 	return factory;

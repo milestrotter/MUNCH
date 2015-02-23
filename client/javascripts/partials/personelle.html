@@ -1,12 +1,12 @@
 <div id="dashboard_main" class="nestled" ng-controller="Personelle">
 	<h1>WELCOME {{logged_in_user.username}}</h1>
-	<h2>Personelle</h2>
+	<h2>Personnel</h2>
 	<div id="personelle_employees_list">
 		<table ng-repeat="personelle_employee in personelle_employees">
 			<tbody>
 				<tr class="bold">
 					<td>Username:</td>
-					<td>{{personelle_employee.username}} <button ng-click="personelle_dismiss" ng-show="logged_in_user.username!=personelle_employee.username">SACK</button></td>
+					<td>{{personelle_employee.username}} <button class="sack" ng-click="personelle_dismiss(personelle_employee)" ng-show="logged_in_user.username!=personelle_employee.username">SACK</button></td>
 				</tr>
 				<tr>
 					<td>First Name:</td>

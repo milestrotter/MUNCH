@@ -82,7 +82,7 @@ munch.controller('Personelle',function($scope,CustomerFactory){
 	CustomerFactory.getPersonelle(function(data){
 		$scope.personelle_employees=data;
 	});
-	$scope.personelle_dismiss=function(){
-		CustomerFactory.removePersonelle();
+	$scope.personelle_dismiss=function(personelle_employee){
+		CustomerFactory.removePersonelle(personelle_employee);
 	}
 });

@@ -6,6 +6,13 @@ var DashboardMessage = mongoose.model('DashboardMessage');
 var DashboardSpecial = mongoose.model('DashboardSpecial');
 var ChalkboardMessage = mongoose.model('ChalkboardMessage');
 
+//Chris
+var Schedule = mongoose.model('Schedule');
+var Shift = mongoose.model('Shift');
+var Tip = mongoose.model('Tip');
+var User = mongoose.model('User');
+var Pickup = mongoose.model('Pickup')
+
 var logged_in_user = {};
 
 module.exports = {
@@ -15,6 +22,21 @@ module.exports = {
         DashboardMessage.remove({},function(err,removed){});
         DashboardSpecial.remove({},function(err,removed){});
         ChalkboardMessage.remove({},function(err,removed){});
+
+        Tip.remove({},function(err,removed){});
+
+        //Chris
+        Schedule.create({title: "Bartending", start: "2015-01-21T08:00:00", end: "2015-01-21T15:00:00",staff: "BLAKE"});
+        Schedule.create({title: "Bartending", start: "2015-01-22T08:00:00", end: "2015-01-22T15:00:00",staff: "BLAKE"});
+        Schedule.create({title: "Bartending", start: "2015-01-23T08:00:00", end: "2015-01-23T15:00:00",staff: "BLAKE"});
+        Shift.create({title: "Bartending", start: "2015-01-25", end: "2015-01-23",staff: ""});
+        Shift.create({title: "Serving Section A", start: "2015-01-26", end: "2015-01-26",staff: ""});
+        Tip.create({date: "2015-01-14", amount: "55.60", username: "BLAKE"});
+        Tip.create({date: "2015-01-15", amount: "70.60", username: "BLAKE"});
+        Tip.create({date: "2015-01-16", amount: "60.60", username: "BLAKE"});
+        Tip.create({date: "2015-01-17", amount: "44.60", username: "BLAKE"});
+
+
 
         //Initialize 'users' collection
         var d=new Date();
@@ -110,6 +132,8 @@ module.exports = {
         });
     },
     removePersonelle: function(request, response) {
-
+        User.remove(request.body,function(err,removed){
+            console.log('removed customer (person name) successfully');
+        });
     }
 }
