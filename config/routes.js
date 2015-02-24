@@ -6,9 +6,6 @@ var main = require('../server/controllers/main.js');
 //Miles
 var menu = require('../server/controllers/menu.js');
 
-var all_messages=[{username:'Adam',message:'where are those hot dogs??',date:'[12:22]'}];
-//  load other controllers here
-
 module.exports = function Routes(app) {
     app.get('/',                                function(req, res) { users.index(req, res) });
 //-----------------------------Ulysses-----------------------------
@@ -16,20 +13,19 @@ module.exports = function Routes(app) {
     //Needs to be .post for req.body to work
     app.post('/login',                          function(request, response) { users.login(request, response) });
     app.get('/dashboard',                       function(request, response) { users.goToDashboard(request, response) });
+    app.post('/login_submit',                   function(request, response) { users.login(request, response) });
     //REGISTRATION
-
-    app.post('/makeNewUser.json',           function(request, response) { users.makeNewUser(request, response) });
-
+    app.post('/makeNewUser.json',               function(request, response) { users.makeNewUser(request, response) });
     //DASHBOARD
-    app.get('/getDashboardMessages.json',   function(request, response) { users.getDashboardMessages(request, response) });
-    app.get('/getDashboardSpecials.json',   function(request, response) { users.getDashboardSpecials(request, response) });
-    app.get('/getLoggedInUserDB.json',      function(request, response) { users.getLoggedInUserDB(request, response) });
-    app.get('/getChalkboardMessages.json',      function(request, response) { users.getChalkboardMessages(request, response) });
+    app.get('/getDashboardMessages.json',       function(request, response) { users.getDashboardMessages(request, response) });
+    app.get('/getDashboardSpecials.json',       function(request, response) { users.getDashboardSpecials(request, response) });
+    app.get('/getLoggedInUserDB.json',          function(request, response) { users.getLoggedInUserDB(request, response) });
+    app.get('/getScribbles.json',               function(request, response) { users.getScribbles(request, response) });
     app.post('/makeNewScribble.json',           function(request, response) { users.makeNewScribble(request, response) }); 
     //PROFILE
-    app.post('/editProfile.json',           function(request, response) { users.editProfile(request, response) });
+    app.post('/editProfile.json',               function(request, response) { users.editProfile(request, response) });
     //PERSONNEL
-    app.get('/getPersonnel.json',      function(request, response) { users.getPersonnel(request, response) });
+    app.get('/getPersonnel.json',               function(request, response) { users.getPersonnel(request, response) });
     app.post('/removePersonnel.json',           function(request, response) { users.removePersonnel(request, response) });
 //-----------------------------Chris-----------------------------
     app.get('/schedules',                       function(request, response) { main.index(request, response) });
@@ -51,28 +47,7 @@ module.exports = function Routes(app) {
     app.post('/updateItem.json',                function(request, response) { menu.updateMenu(request, response) });
     app.get('/logout',                          function(req, res) { users.index(req, res) });
 
-    app.io.route('client_ready',    function(request) {
-        // sending a message to just that person
-        request.io.emit('info', { msg: 'In routes.js' });
-
-        // broadcasting to everyone
-        app.io.broadcast('global_event', { msg: 'hello' });
-
-        // broadcasting an event to everyone except the person you established the socket connection to
-        request.io.broadcast('event', {msg: 'hi' });
-
-        // listening for an event
-        app.io.route('my other event', function(data) { console.log("Received 'my other event' :", data); });  
-        app.io.route('disconnect',  function() { app.io.broadcast('user disconnected'); });
-    });
-
-    app.io.route('new_screen',function(request){
-        console.log('new_screen: ',all_messages);
-        request.io.emit('sent_existing',all_messages);
-    });
     app.io.route('chalkboard_submitted',function(request){
-        all_messages.push(request.data);
-        console.log('chalkboard_submitted',request.data);
         app.io.broadcast('scribble_everyone',request.data);
     });
 };

@@ -10,6 +10,7 @@
 	</ul>
 	<h2>Chalkboard</h2>
 	<div id="scribbles">
+		<p ng-repeat="scribble in scribbles"><span class="scribble_username bold">{{scribble.username}}</span><span class="scribble_message"> | {{scribble.message}}</span><span class="scribble date"> [{{scribble.date}}]</span></p>
 	</div>
 	<textarea id="chalkboard" ng-model="new_scribble" class="nestled"></textarea><div id="chalkboard_button_wrapper" class="nestled"><button id="chalkboard_clear">Clear</button><button id="chalkboard_submit" ng-click="chalkboard_submit(new_scribble)">Scribble!</button></div>
 </div>

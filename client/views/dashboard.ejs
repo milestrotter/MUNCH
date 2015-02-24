@@ -6,13 +6,13 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
     <script type="text/javascript" src="../javascripts/dashboard_app.js"></script>
-    <script type="text/javascript" src="../javascripts/factories/factories.js"></script>
-    <script type="text/javascript" src="../javascripts/controllers/controllers.js"></script>
+    <script type="text/javascript" src="../javascripts/factories/userFactory.js"></script>
+    <script type="text/javascript" src="../javascripts/controllers/usersController.js"></script>
 <!-- Chris -->
 	<link rel="stylesheet" type="text/css" href="/stylesheets/calendarstyle.css" />
 
-    <script type="text/javascript" src="../javascripts/controllers/schedules.js"></script>
-    <script type="text/javascript" src="../javascripts/factories/ScheduleFactory.js"></script>
+    <script type="text/javascript" src="../javascripts/controllers/schedulesController.js"></script>
+    <script type="text/javascript" src="../javascripts/factories/scheduleFactory.js"></script>
     <script type="text/javascript" src="http://cdn.amcharts.com/lib/3/amcharts.js"></script>
     <script type="text/javascript" src="http://cdn.amcharts.com/lib/3/serial.js"></script>
 
@@ -32,7 +32,7 @@
             });
             $.ajax({
                 type: 'GET',
-                url: './javascripts/controllers/schedules.js',
+                url: './javascripts/controllers/schedulesController.js',
                 success: function (data) {
                     AmCharts.makeChart("chartdiv",
                     {
@@ -83,14 +83,8 @@
 
     //MESSAGING
     var io = io.connect();
-    io.emit('new_screen',{msg:'read to get existing messages'});
-    io.on('sent_existing',function(existing_messages){
-    	console.log(existing_messages);
-    	for(message in existing_messages){
-    		$('#scribbles').append('<p><span class="scribble_username bold">'+existing_messages[message].username+'</span><span class="scribble_message"> | '+existing_messages[message].message+'</span><span class="scribble date"> ['+existing_messages[message].date+']</span></p>');
-    	}
-    });
     io.on('scribble_everyone',function(scribble_received){
+        console.log('got one!');
 		$('#scribbles').append('<p><span class="scribble_username bold">'+scribble_received.username+'</span><span class="scribble_message"> | '+scribble_received.message+'</span><span class="scribble date"> ['+scribble_received.date+']</span></p>');
     });
     $(document).on('click','#chalkboard_clear',function(){
@@ -135,7 +129,8 @@
         	$('#empty_box').show();
         	$('#dashboard_partials').css('width','500px');
         	$('.dashboard_navbar_tab').find('h2').css('top','-53%');
-        	$('#dashboard_navbar').css('top','0%');
+        	$('#dashboard_navbar').css('top','40px');
+            io.emit('new_screen',{msg:'read to get existing messages'});
         });
 
 
@@ -230,7 +225,8 @@
 			</div>
 		</div>
 	</div>
-	<h2><a id="home" class="no_decoration" href="#/">HOME</a></h2>
+	<h2><a id="home" class="no_decoration" href="#">HOME</a></h2>
+    <!-- <h2>HOME</h2> -->
 	<h2><a id="logout" class="no_decoration" href="/">LOG OUT</a></h2>
 	<div id="empty_box" class="nestled"></div>
 	<div id="dashboard_partials" class="nestled wide">

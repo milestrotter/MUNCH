@@ -11,6 +11,4 @@ var UserSchema = new mongoose.Schema({
 	account_type: String,
 	date: {type: Date, default: d }
 });
-// UserSchema.path('name').required(true, 'User name cannot be blank');
-// UserSchema.path('item').required(true, 'User item cannot be blank');
 mongoose.model('User', UserSchema);

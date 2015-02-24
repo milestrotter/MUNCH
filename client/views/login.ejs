@@ -8,19 +8,11 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
     <script type="text/javascript" src="../javascripts/app.js"></script>
-    <script type="text/javascript" src="../javascripts/factories/factories.js"></script>
-    <script type="text/javascript" src="../javascripts/controllers/controllers.js"></script>
+    <script type="text/javascript" src="../javascripts/factories/userFactory.js"></script>
+    <script type="text/javascript" src="../javascripts/controllers/usersController.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript">
-        //Socket stuff...not necessary for ministore assignment
-        var io = io.connect();
-        io.emit('client_ready');
-        io.on('info', function(msg) {
-            console.log("Received 'info' event as well as the following message:", msg);
-        });
-        io.emit('user_logged_in',{user:'LOGIN PAGE'});
-
         $(document).ready(function(){
             var random_num=Math.floor(Math.random()*3);
             if(random_num==0){
@@ -87,17 +79,16 @@
                 <span class="neon_green"><a href="#/learn_more">Learn More-></a></span>
             </h6>
         </div>
-        <div id="login_intro_left_loginbar" ng-controller="LoginIntro">
+        <div id="login_intro_left_loginbar">
 <!-- LOGIN ERROR MESSAGE -->
             <div id="login_error">
-                <p class="red">{{login_error.message}}</p>
+                <p class="red"><%= error %></p>
             </div>
 <!-- LOGIN FORM -->
-            <form id="login_form" name="login_form" ng-submit="login_form.$valid && login(login_info)" novalidate >
-                <input type="text" class="nestled" ng-model="login_info.username" placeholder="username" required>
-                <input type="text" class="nestled" ng-model="login_info.password" placeholder="password" required>
-                <input id="login_form_submit" type="submit" class="nestled" value="Login" ng-hide="logged_in_user.username.length">
-                <button id="go_to_dashboard" ng-click="get()" ng-show="logged_in_user.username.length"><a href="/dashboard" class="no_decoration">GO TO DASHBOARD</a></button>
+            <form id="login_form" name="login_form" action="/login_submit" method="post" novalidate>
+                <input type="text" class="nestled" name="username" placeholder="username" ng-model="username" required>
+                <input type="text" class="nestled" name="password" placeholder="password" ng-model="password" required>
+                <input id="login_form_submit" type="submit" class="nestled" value="Login" ng-class="{'opaque':!login_form.$valid}" ng-disabled="!login_form.$valid">
             </form>
         </div>
         <div>
@@ -194,7 +185,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td><input id="registration_form_submit" type="submit" value="Register!"></td>
+                                    <td><input id="registration_form_submit" type="submit" value="Register!" ng-class="{'opaque':!reg_form.$valid}" ng-disabled="!reg_form.$valid"></td>
                                 </tr>
                             </tbody>
                         </table>

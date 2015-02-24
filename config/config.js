@@ -20,7 +20,7 @@ module.exports = {
         root: rootPath,
         notifier: notifier,
         app: {
-            name: 'MEN Demo (dev)'
+            name: 'MEAN Demo (dev)'
         }
     },
     test: {
@@ -28,7 +28,7 @@ module.exports = {
         root: rootPath,
         notifier: notifier,
         app: {
-            name: 'MEN Demo (test)'
+            name: 'MEAN Demo (test)'
         }
     },
     production: {}

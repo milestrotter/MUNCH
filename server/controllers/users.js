@@ -4,7 +4,7 @@ var mongoose = require('mongoose')
 var User = mongoose.model('User');
 var DashboardMessage = mongoose.model('DashboardMessage');
 var DashboardSpecial = mongoose.model('DashboardSpecial');
-var ChalkboardMessage = mongoose.model('ChalkboardMessage');
+var Scribble = mongoose.model('Scribble');
 
 //Chris
 var Schedule = mongoose.model('Schedule');
@@ -18,10 +18,11 @@ var logged_in_user = {};
 module.exports = {
     index: function(request, response) {
         //Clear out all dbs at start
+        //NOTE COMMENT OUT THE .remove LINES IF YOU WANT THE DB TO REMEMBER INFO
         User.remove({},function(err,removed){});
         DashboardMessage.remove({},function(err,removed){});
         DashboardSpecial.remove({},function(err,removed){});
-        ChalkboardMessage.remove({},function(err,removed){});
+        // Scribble.remove({},function(err,removed){});
 
         Tip.remove({},function(err,removed){});
 
@@ -36,46 +37,41 @@ module.exports = {
         Tip.create({date: "2015-01-16", amount: "60.60", username: "BLAKE"});
         Tip.create({date: "2015-01-17", amount: "44.60", username: "BLAKE"});
 
-
-
         //Initialize 'users' collection
         var d=new Date();
         d=d.toDateString();
         User.create({firstname:'Anders',lastname:'Holmvik',username:'DERS',email:'DJango@yahoo.com',phone:'555-555-5555',password:'1',account_type:'mgmt'});
-
         User.create({firstname:'Blake',lastname:'Anderson',username:'BLAKE',email:'poppy@gmail.com',phone:'444-444-4444',password:'2',account_type:'personal'});
         User.create({firstname:'Adam',lastname:'DeMamp',username:'ADAM',email:'dude@msn.com',phone:'333-333-3333',password:'3',account_type:'personal'});
         User.create({firstname:'-',lastname:'-',username:'TEAM',email:'team@restaurant.com',phone:'222-222-2222',password:'4',account_type:'team'});
 
         DashboardMessage.create(
-            {message:'Clean up that stuff on the floor, what is that even',username:'BIGBOSS',date:d},
-            {message:'Need more beer, now!',username:'BIGBOSS',date:d},
-            {message:'You all gonna be fired',username:'BIGBOSS',date:d});
+            {message:'Clean up that stuff on the floor, what is that even',username:'DERS',date:d},
+            {message:'Need more beer, now!',username:'DERS',date:d},
+            {message:'You all gonna be fired',username:'DERS',date:d});
         DashboardSpecial.create(
             {item:'Goop',description:'Pretty awful stuff actually'},
             {item:'Cookies',description:'2 cookies baked to mediocrity'});
-        ChalkboardMessage.create({username:'BIGBOSS',message:'No floor cleaning today.'});
-        ChalkboardMessage.create({username:'Carl',message:'Where is that turkey??'});
+        //NOTE: UNCOMMENT NEXT TWO LINES IF NEED TO REINITIALIZE SCRIBBLES
+        // Scribble.create({username:'DERS',message:'No floor cleaning today.',date:'12:22'});
+        // Scribble.create({username:'Adam',message:'Where are those hot dogs??',date:'12:25'});
+
         //Render Login/Registration view page
-        response.render('../../client/views/login',{ title: 'MUNCH' });
+        response.render('../../client/views/login',{ title:'MUNCH',error:'' });
     },
     goToDashboard: function(request, response) {
-        response.render('../../client/views/dashboard',{ title: 'DASHBOARD',username:logged_in_user.username });
+        response.render('dashboard',{ title:'DASHBOARD',username:logged_in_user.username });
     },
     login: function(request, response){
         User.findOne({username:request.body.username.toUpperCase()},function(err,db_found_user){
             if(db_found_user==null){
-                console.log('User not found.');
-                response.send('User not found.');
+                response.render('login',{ title:'MUNCH',error:'User not found.' });
             }else{
                 if(request.body.password!==db_found_user.password){
-                    console.log('Incorrect password.');
-                    response.send('Incorrect password.');
+                    response.render('login',{ title:'MUNCH',error:'Incorrect password.' });
                 }else{
                     logged_in_user=db_found_user;
-                    console.log('FOUND: ',logged_in_user);
-                    response.send(db_found_user);
-                    // response.redirect('/dashboard');
+                    response.redirect('/dashboard');
                 }
             }
         });
@@ -103,14 +99,14 @@ module.exports = {
             response.send(db_dashboard_specials);
         });
     },
-    getChalkboardMessages: function(request, response) {
-        ChalkboardMessage.find({},function(err,db_chalkboard_messages){
-            response.send(db_chalkboard_messages);
+    getScribbles: function(request, response) {
+        Scribble.find({},function(err,db_scribbles){
+            response.send(db_scribbles);
         });
     },
     makeNewScribble: function(request, response) {
         console.log(request.body);
-        ChalkboardMessage.create({username:request.body.username,message:request.body.message,date:request.body.date});
+        Scribble.create({username:request.body.username,message:request.body.message,date:request.body.date});
     },
 
 
