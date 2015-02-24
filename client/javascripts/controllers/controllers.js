@@ -64,7 +64,6 @@ munch.controller('DashboardMessages',function($scope,CustomerFactory){
 	CustomerFactory.getChalkboardMessages(function(data){
 		$scope.chalkboard_messages=data;
 	});
-	// $scope.chalkboard_messages=CustomerFactory.showChalkboardMessages();
 	$scope.chalkboard_submit=function(new_scribble){
 		CustomerFactory.makeNewScribble(new_scribble);
 	}
@@ -77,12 +76,12 @@ munch.controller('Profile',function($scope,CustomerFactory){
 });
 
 
-//PERSONELLE
-munch.controller('Personelle',function($scope,CustomerFactory){
-	CustomerFactory.getPersonelle(function(data){
-		$scope.personelle_employees=data;
+//PERSONNEL
+munch.controller('Personnel',function($scope,CustomerFactory){
+	CustomerFactory.getPersonnel(function(data){
+		$scope.personnel_employees=data;
 	});
-	$scope.personelle_dismiss=function(personelle_employee){
-		CustomerFactory.removePersonelle(personelle_employee);
+	$scope.personnel_dismiss=function(personnel_employee){
+		CustomerFactory.removePersonnel(personnel_employee);
 	}
 });

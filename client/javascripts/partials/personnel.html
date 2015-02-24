@@ -1,0 +1,34 @@
+<div id="dashboard_main" class="nestled" ng-controller="Personnel">
+	<h1>WELCOME {{logged_in_user.username}}</h1>
+	<h2>Personnel</h2>
+	<div id="personnel_employees_list">
+		<table ng-repeat="personnel_employee in personnel_employees">
+			<tbody>
+				<tr class="bold">
+					<td>Username:</td>
+					<td>{{personnel_employee.username}} <button class="sack" ng-click="personnel_dismiss(personnel_employee)" ng-show="logged_in_user.username!=personnel_employee.username">SACK</button></td>
+				</tr>
+				<tr>
+					<td>First Name:</td>
+					<td>{{personnel_employee.firstname}}</td>
+				</tr>
+				<tr>
+					<td>Last Name:</td>
+					<td>{{personnel_employee.lastname}}</td>
+				</tr>
+				<tr>
+					<td>Email:</td>
+					<td>{{personnel_employee.email}}</td>
+				</tr>
+				<tr>
+					<td>Phone:</td>
+					<td>{{personnel_employee.phone}}</td>
+				</tr>
+				<tr>
+					<td>Account Type:</td>
+					<td>{{personnel_employee.account_type}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

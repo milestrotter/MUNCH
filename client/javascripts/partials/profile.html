@@ -1,7 +1,7 @@
 	<div id="dashboard_main" class="nestled" ng-controller="Profile">
 		<h1>{{logged_in_user.username}}</h1>
 		<h2>Profile <span id="profile_saved" class="neon_green">Saved!</span></h2>
-		<button id="profile_edit_button" ng-click="input_clickable=true" ng-show="!input_clickable">Edit</button>
+		<button id="profile_edit_button" ng-click="input_clickable=true" ng-hide="input_clickable">Edit</button>
 		<button id="profile_save_button" ng-click="profile_save(logged_in_user._id,password);input_clickable=false" ng-show="input_clickable">Save</button>
 		<table id="profile_table">
 			<tbody>
@@ -21,11 +21,11 @@
 					<td>Phone:</td>
 					<td><input type="text" value="{{logged_in_user.phone}}" ng-model="logged_in_user.phone" ng-readonly="!input_clickable"></td>
 				</tr>
-				<tr>
+				<tr ng-show="input_clickable">
 					<td>Change Password:</td>
 					<td><input type="password" ng-model="password" ng-readonly="!input_clickable"></td>
 				</tr>
-				<tr>
+				<tr ng-show="input_clickable">
 					<td>New Password Confirm:</td>
 					<td><input type="password" ng-model="password_confirm" ng-readonly="!input_clickable"></td>
 				</tr>

@@ -64,19 +64,18 @@ module.exports = {
     },
     login: function(request, response){
         User.findOne({username:request.body.username.toUpperCase()},function(err,db_found_user){
-            if(db_found_user.length==0){
+            if(db_found_user==null){
                 console.log('User not found.');
                 response.send('User not found.');
             }else{
                 if(request.body.password!==db_found_user.password){
                     console.log('Incorrect password.');
-                    console.log('entered: ',request.body.password);
-                    console.log('actual: ',db_found_user.password);
                     response.send('Incorrect password.');
                 }else{
                     logged_in_user=db_found_user;
                     console.log('FOUND: ',logged_in_user);
                     response.send(db_found_user);
+                    // response.redirect('/dashboard');
                 }
             }
         });
@@ -125,13 +124,13 @@ module.exports = {
         });
     },
 
-    //PERSONELLE
-    getPersonelle: function(request, response) {
+    //PERSONNEL
+    getPersonnel: function(request, response) {
         User.find({},function(err,all){
             response.send(all);
         });
     },
-    removePersonelle: function(request, response) {
+    removePersonnel: function(request, response) {
         User.remove(request.body,function(err,removed){
             console.log('removed customer (person name) successfully');
         });

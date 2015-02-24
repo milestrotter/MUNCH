@@ -14,10 +14,6 @@ munch.config(function($routeProvider){
 			{
 				templateUrl:'javascripts/partials/schedule.html'
 			})
-		// .when('/menu',
-		// 	{
-		// 		templateUrl:'javascripts/partials/menu.html'
-		// 	})
 		.when('/tables',
 			{
 				templateUrl:'javascripts/partials/tables.html'
@@ -34,9 +30,9 @@ munch.config(function($routeProvider){
 			{
 				templateUrl:'javascripts/partials/inventory.html'
 			})
-		.when('/personelle',
+		.when('/personnel',
 			{
-				templateUrl:'javascripts/partials/personelle.html'
+				templateUrl:'javascripts/partials/personnel.html'
 			})
 		.when('/profile',
 			{

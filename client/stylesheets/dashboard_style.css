@@ -146,8 +146,8 @@ body{
 				background-repeat: no-repeat;
 				background-position: 0px 0px;
 			}
-			#dashboard_navbar_personelle{
-				background-image: url(../imgs/dashboard_navbar_personelle_bg.jpg);
+			#dashboard_navbar_personnel{
+				background-image: url(../imgs/dashboard_navbar_personnel_bg.jpg);
 				background-size: auto 100%;
 				background-repeat: no-repeat;
 				background-position: -60px 0px;
@@ -174,8 +174,8 @@ body{
 		width: 100%;
 	}
 
-/*PERSONELLE PARTIAL STYLING*/
-#personelle_employees_list{
+/*PERSONNEL PARTIAL STYLING*/
+#personnel_employees_list{
 	padding-bottom: 80px;
 }
 

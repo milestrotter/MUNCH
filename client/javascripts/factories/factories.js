@@ -2,33 +2,19 @@
 
 munch.factory('CustomerFactory',function($http){
 	var n=new Date();
-	//Initialize Angular (client side) version of 'names'
 	var names=[];
-	//Initialize Angular (client side) version of 'orders'
 	var orders=[];
-
 	var login_error={message:''};
-
 	var registration_errors=[];
-
 	var registration_success={status:false};
-
 	var users=[];
-
-	//Need to empty username if you want the login stuff to be empty...
 	var logged_in_user={username:''};
-
 	var account_type='';
-
 	var dashboard_messages=[];
-
 	//CHANGE THIS WITH DB
 	var dashboard_specials=[];
-
 	var chalkboard_messages=[];
-
-	var all_personelle=[];
-
+	var all_personnel=[];
 	var factory={};
 
 //----------New----------
@@ -39,10 +25,13 @@ munch.factory('CustomerFactory',function($http){
 		//VALIDATION
 		$http.post('/login',login_info).success(function(output){
 			if(typeof output=='string'){
-				login_error=output;
+				login_error.message=output;
 			}else{
+				login_error.message='';
 				logged_in_user=output;
 				console.log('factory.login',logged_in_user);
+				// $http.get('/dashboard').success(function(output){
+				// });
 			}
 			callback(logged_in_user);
 		});
@@ -93,13 +82,13 @@ munch.factory('CustomerFactory',function($http){
 
 	factory.getNavBar=function(){
 		if(logged_in_user.account_type=='team'){
-			return {schedule:false,menu:true,tables:true,kitchen:true,tips:false,inventory:false,personelle:false,profile:true};
+			return {schedule:false,menu:true,tables:true,kitchen:true,tips:false,inventory:false,personnel:false,profile:true};
 		}
 		if(logged_in_user.account_type=='personal'){
-			return {schedule:true,menu:true,tables:false,kitchen:false,tips:true,inventory:false,personelle:false,profile:true};
+			return {schedule:true,menu:true,tables:false,kitchen:false,tips:true,inventory:false,personnel:false,profile:true};
 		}
 		if(logged_in_user.account_type=='mgmt'){
-			return {schedule:false,menu:true,tables:false,kitchen:false,tips:false,inventory:true,personelle:true,profile:true};
+			return {schedule:false,menu:true,tables:false,kitchen:false,tips:false,inventory:true,personnel:true,profile:true};
 		}
 	}
 	factory.getDashboardMessages=function(callback){
@@ -119,7 +108,6 @@ munch.factory('CustomerFactory',function($http){
 	factory.getChalkboardMessages=function(callback){
 		$http.get('/getChalkboardMessages.json').success(function(output){
 			chalkboard_messages=output;
-			// console.log(chalkboard_messages);
 			callback(chalkboard_messages);
 		});
 		return chalkboard_messages;
@@ -130,9 +118,6 @@ munch.factory('CustomerFactory',function($http){
 		$http.post('/makeNewScribble.json',{username:logged_in_user.username,message:new_scribble,date:d.getHours()+':'+d.getMinutes()}).success(function(output){
 		});
 	}
-	// factory.showChalkboardMessages=function(){
-	// 	return chalkboard_messages;
-	// }
 
 	//PROFILE
 	factory.editProfile=function(user_new_info,password,callback){
@@ -144,16 +129,16 @@ munch.factory('CustomerFactory',function($http){
 		return logged_in_user;
 	}
 
-	//PERSONELLE
-	factory.getPersonelle=function(callback){
-		$http.get('/getPersonelle.json').success(function(output){
-			all_personelle=output;
-			callback(all_personelle);
+	//PERSONNEL
+	factory.getPersonnel=function(callback){
+		$http.get('/getPersonnel.json').success(function(output){
+			all_personnel=output;
+			callback(all_personnel);
 		});
-		return all_personelle;
+		return all_personnel;
 	}
-	factory.removePersonelle=function(personelle_employee){
-		$http.post('/removePersonelle.json',personelle_employee).success(function(output){
+	factory.removePersonnel=function(personnel_employee){
+		$http.post('/removePersonnel.json',personnel_employee).success(function(output){
 		});
 	}
 	return factory;

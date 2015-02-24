@@ -94,7 +94,7 @@ body {
 			#login_intro_left_loginbar{
 				margin-top: 20px;
 			}
-				#login_intro_left input:first-child{
+				#login_intro_left input:first-child,#login_error{
 					margin-left: 50px;
 				}
 				#login_intro_left #login_form_submit,#cancel,#go_to_register,#registration_form #registration_form_submit,#go_to_dashboard{

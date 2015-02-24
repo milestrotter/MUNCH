@@ -10,7 +10,6 @@
     <script type="text/javascript" src="../javascripts/controllers/controllers.js"></script>
 <!-- Chris -->
 	<link rel="stylesheet" type="text/css" href="/stylesheets/calendarstyle.css" />
-	<link rel="stylesheet" type="text/css" href="/stylesheets/personelle.css" />
 
     <script type="text/javascript" src="../javascripts/controllers/schedules.js"></script>
     <script type="text/javascript" src="../javascripts/factories/ScheduleFactory.js"></script>
@@ -82,6 +81,7 @@
                 })
         })
 
+    //MESSAGING
     var io = io.connect();
     io.emit('new_screen',{msg:'read to get existing messages'});
     io.on('sent_existing',function(existing_messages){
@@ -102,6 +102,8 @@
     		io.emit('chalkboard_submitted',{username:'<%= username %>',message:$('#chalkboard').val(),date:d.getHours()+':'+d.getMinutes()});
     	}
     });
+
+    //NAVIGATION
     $(document).ready(function(){
     	$('.dashboard_navbar_tab').css('opacity','0');
     	$('.dashboard_navbar_tab').animate({'opacity':'1'},1000);
@@ -123,12 +125,11 @@
             });
         });
         $(document).on('click','.dashboard_navbar_tab',function(){
+            $('#dashboard_partials').css('width','95%');
         	$('#empty_box').hide();
-        	$('#dashboard_partials').css('width','100%');
         	$('.dashboard_navbar_tab *').stop(true,true);
     		$('#dashboard_navbar').css('top','90%');
     		$('.dashboard_navbar_tab').find('h2').css('top','-97%');
-    		$('#dashboard_partials').css('width','100%');
         });
         $(document).on('click','#home',function(){
         	$('#empty_box').show();
@@ -210,7 +211,7 @@
 				</ul>
 				<h2>INVENTORY</h2>
 			</div>
-			<div id="dashboard_navbar_personelle" class="dashboard_navbar_tab nestled" ng-show="navbar_show.personelle" onclick="location.href='#/personelle'">
+			<div id="dashboard_navbar_personnel" class="dashboard_navbar_tab nestled" ng-show="navbar_show.personnel" onclick="location.href='#/personnel'">
 				<div></div>
 				<ul>
 					<li>Change worker account settings</li>
@@ -218,7 +219,7 @@
 				</ul>
 				<h2>PERSONNEL</h2>
 			</div>
-			<div id="dashboard_navbar_profile" class="dashboard_navbar_tab nestled" ng-show="navbar_show.profile" ng-click="dashboard_navbar_selected('profile')" onclick="location.href='#/profile'">
+			<div id="dashboard_navbar_profile" class="dashboard_navbar_tab nestled" ng-show="navbar_show.profile" onclick="location.href='#/profile'">
 				<div></div>
 				<ul>
 					<li>Change your account settings</li>
@@ -232,7 +233,10 @@
 	<h2><a id="home" class="no_decoration" href="#/">HOME</a></h2>
 	<h2><a id="logout" class="no_decoration" href="/">LOG OUT</a></h2>
 	<div id="empty_box" class="nestled"></div>
-	<div id="dashboard_partials" class="nestled wide" ng-view=""></div>
+	<div id="dashboard_partials" class="nestled wide">
+        <!-- ng-view must be on its own, otherwise confuses jQuery styling -->
+        <div ng-view=""></div>
+    </div>
 	<div ng-controller='schedules' id='loopContainer'>
             <div id='{{tip._id}}' tipdate='{{tip.date}}' tipamount='{{tip.amount}}' ng-repeat="tip in tips"></div>
     </div>

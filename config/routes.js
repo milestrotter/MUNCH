@@ -28,9 +28,9 @@ module.exports = function Routes(app) {
     app.post('/makeNewScribble.json',           function(request, response) { users.makeNewScribble(request, response) }); 
     //PROFILE
     app.post('/editProfile.json',           function(request, response) { users.editProfile(request, response) });
-    //PERSONELLE
-    app.get('/getPersonelle.json',      function(request, response) { users.getPersonelle(request, response) });
-    app.post('/removePersonelle.json',           function(request, response) { users.removePersonelle(request, response) });
+    //PERSONNEL
+    app.get('/getPersonnel.json',      function(request, response) { users.getPersonnel(request, response) });
+    app.post('/removePersonnel.json',           function(request, response) { users.removePersonnel(request, response) });
 //-----------------------------Chris-----------------------------
     app.get('/schedules',                       function(request, response) { main.index(request, response) });
     app.get('/getSchedule.json',                function(request,response)  { main.getSchedule(request,response) });
