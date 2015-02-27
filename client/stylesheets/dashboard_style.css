@@ -1,14 +1,24 @@
 *{
-	padding: 0px;
-	margin: 0px;
+	padding: 0em;
+	margin: 0em;
 	font-family: "Rockwell",serif;
 }
 body{
+	margin: 2% 1em 0%;
 	background-image: url(../imgs/navbar_bg.jpg);
 	background-size: 130% auto;
 	background-repeat: no-repeat;
-	/*background-position: 0px 100px;*/
+	background-attachment: fixed;
 }
+	.opaque{
+		opacity: 0.5;
+		pointer-events: none;
+		cursor: default;
+	}
+	.pay{
+		color: RGB(89,166,61);
+		background-color: RGB(230,230,230);
+	}
 	.bold{
 		font-weight: bolder;
 	}
@@ -28,69 +38,69 @@ body{
 	h2{
 		text-align: center;
 	}
-	#home,#logout,.dashboard_navbar_tab h2{
-		font-size: 25px;
+	.dashboard_navbar_tab h2{
+		font-size: 1.55em;
 		color: black;
 	}
 	#home,#logout{
-		width: 188px;
-		position: fixed;
-		top: 93.5%;
-		border-top: solid black 2px;
-		border-color: white;
+		margin-top: 89vh;
+		font-size: 1em;
 		color: white;
 	}
-	#home,#logout{
+	#home>h2,#logout>h2{
+		border-top: solid black 0.125em;
+		border-color: white;
 		background-color: rgba(25,38,31,0.7);
 	}
-	#home{
-		left: 794px;
-	}
-	#logout{
-		left: 990px;
+	/*These need to be positioned elements for z-index to work*/
+	#empty_box,#dashboard_partials{
+		position: relative;
 	}
 	#empty_box{
-		width: 780px;
-		height: 600px;
+		width: 49%;
+		height: 10em;
+		z-index: -1;
 	}
 	#dashboard_partials{
-		
-		/*height: 90%;*/
-		margin: 20px;
-		background-color: white;
+		height: 87vh;
 		overflow: scroll;
+		background-color: white;
+		/*Greatest stack order to avoid being covered by navbar home & logout*/
+		z-index: 2;
 	}
 	.wide{
-		width: 500px;
+		width: 45%;
 	}
 	#dashboard_main{
-		margin: 20px;
+		margin: 1.25em;
 	}
 		#dashboard_main h2{
-			margin-top: 20px;
+			margin-top: 1.25em;
 			text-align: left;
-			font-size: 35px;
+			font-size: 2.2em;
 		}
 		#dashboard_main ul{
-			padding-left: 25px;
+			padding-left: 1.55em;
 		}
 		#dashboard_main li{
 			color: black;
-			font-size: 25px;
+			font-size: 1.55em;
 		}
 
 /*NAVBAR*/
 	#dashboard_navbar{
-		width: 810px;
-		height: 800px;
+		width: 72%;
+		height: 96%;
 		position: fixed;
+		bottom: 0em;
+		margin-left: 1em;
+		z-index: 1;
 	}
-		#dashboard_navbar>div{
-			margin: 0px 10px;
+		#dashboard_navbar>div>*,.dashboard_navbar_tab ul{
+			width: 16%;
 		}
 		.dashboard_navbar_tab{
-			width: 24%;
-			height: 760px;
+			height: 100vh;
 		}
 			.dashboard_navbar_tab>div{
 				width: 100%;
@@ -104,85 +114,94 @@ body{
 				top: -53%;
 			}
 			.dashboard_navbar_tab ul{
-				width: 160px;
-				padding-left: 25px;
+				padding-left: 1.5em;
 				position: absolute;
-				top: 200px;
+				top: 30%;
 				opacity: 0;
 			}
 			#dashboard_navbar_schedule{
 				background-image: url(../imgs/dashboard_navbar_schedule_bg.jpg);
 				background-size: auto 100%;
 				background-repeat: no-repeat;
-				background-position: 0px 0px;
+				background-position: 0em 0em;
 			}
 			#dashboard_navbar_menu{
 				background-image: url(../imgs/dashboard_navbar_menu_bg2.jpg);
 				background-size: auto 100%;
 				background-repeat: no-repeat;
-				background-position: 0px 0px;
+				background-position: 0em 0em;
 			}
 			#dashboard_navbar_tables{
 				background-image: url(../imgs/dashboard_navbar_tables_bg.jpg);
 				background-size: auto 100%;
 				background-repeat: no-repeat;
-				background-position: 0px 0px;
+				background-position: 0em 0em;
 			}
 			#dashboard_navbar_kitchen{
 				background-image: url(../imgs/dashboard_navbar_kitchen_bg.jpg);
 				background-size: auto 100%;
 				background-repeat: no-repeat;
-				background-position: 0px 0px;
+				background-position: 0em 0em;
 			}
 			#dashboard_navbar_tips{
 				background-image: url(../imgs/dashboard_navbar_tips_bg.jpg);
 				background-size: auto 120%;
 				background-repeat: no-repeat;
-				background-position: 0px 0px;
+				background-position: 0em 0em;
 			}
 			#dashboard_navbar_inventory{
 				background-image: url(../imgs/dashboard_navbar_inventory_bg.jpg);
 				background-size: auto 100%;
 				background-repeat: no-repeat;
-				background-position: 0px 0px;
+				background-position: 0em 0em;
 			}
 			#dashboard_navbar_personnel{
 				background-image: url(../imgs/dashboard_navbar_personnel_bg.jpg);
 				background-size: auto 100%;
 				background-repeat: no-repeat;
-				background-position: -60px 0px;
+				background-position: -3.75em 0em;
 			}
 			#dashboard_navbar_profile{
 				background-image: url(../imgs/dashboard_navbar_profile_bg.jpg);
 				background-size: auto 100%;
 				background-repeat: no-repeat;
-				background-position: 0px 0px;
+				background-position: 0em 0em;
 			}
 
 /*NAVBAR HOME*/
-#scribbles{
-	width: 400px;
+#dashboard_main li button{
+	margin-left: 1.25em;
+	opacity: 0.2;
 }
-#chalkboard{
+#dashboard_main li button:hover{
+	opacity: 1;
+}
+#dashboard_main textarea{
+	resize: vertical;
+}
+#dashboard_new_special_item,#dashboard_new_special_description{
+	width: 39.5%;
+}
+#scribble,#dashboard_new_message{
 	width: 80%;
-	height: 50px;
+	height: 3em;
 }
-#chalkboard_button_wrapper{
+.button_wrapper{
 	width: 18%;
 }
-	#chalkboard_clear,#chalkboard_submit{
+	.button_wrapper>*{
 		width: 100%;
 	}
-
-/*PERSONNEL PARTIAL STYLING*/
-#personnel_employees_list{
-	padding-bottom: 80px;
-}
 
 /*PROFILE PARTIAL STYLING*/
 #profile_table input{
 	border: none;
 }
-#profile_saved{
+#saved{
 	display: none;
+}
+
+/*PERSONNEL*/
+#personnel_employees_list table{
+	margin-bottom: 1em;
 }

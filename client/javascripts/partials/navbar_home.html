@@ -1,16 +1,45 @@
 <div id="dashboard_main" class="nestled" ng-controller="DashboardMessages">
 	<h1>WELCOME {{logged_in_user.username}}</h1>
+<!-- MESSAGES	 -->
 	<h2>Messages</h2>
-	<ul>
-		<li ng-repeat="dashboard_message in dashboard_messages">{{dashboard_message.message}}</li>
+	<ul id="dashboard_messages">
+		<li id="{{$index}}" ng-repeat="dashboard_message in dashboard_messages">{{dashboard_message.message}}<button class="dashboard_message_delete" ng-click="deleteDashboardMessage(dashboard_message._id)" ng-show="logged_in_user.account_type=='mgmt'">Delete</button></li>
 	</ul>
+	<div ng-show="logged_in_user.account_type=='mgmt'">
+		<form ng-submit="makeNewDashboardMessage(new_dashboard_message);new_dashboard_message=null">
+			<textarea name="message" id="dashboard_new_message" ng-model="new_dashboard_message" class="nestled"></textarea>
+			<div class="button_wrapper nestled">
+				<button type="button" id="dashboard_new_message_clear" ng-click="new_dashboard_message=null">Clear</button>
+				<input type="submit" id="dashboard_new_message_submit" ng-class="{'opaque':!new_dashboard_message}" value="Submit!">
+			</div>
+		</form>
+		<!--  ng-click="makeNewDashboardMessage(new_dashboard_message)" -->
+	</div>
+<!-- SPECIALS -->
 	<h2>Specials of the Day</h2>
-	<ul>
-		<li ng-repeat="dashboard_special in dashboard_specials">{{dashboard_special.item}}: {{dashboard_special.description}}</li>
+	<ul id="dashboard_specials">
+		<li id="{{$index}}" ng-repeat="dashboard_special in dashboard_specials">{{dashboard_special.item}}<span ng-show="dashboard_special.description.length">:</span> {{dashboard_special.description}}<button class="dashboard_special_delete" ng-click="deleteDashboardSpecial(dashboard_special._id)" ng-show="logged_in_user.account_type=='mgmt'">Delete</button></li>
 	</ul>
+	<div ng-show="logged_in_user.account_type=='mgmt'">
+		<form ng-submit="makeNewDashboardSpecial(item,description);item=null;description=null">
+			<textarea id="dashboard_new_special_item" ng-model="item" class="nestled" placeholder="Item name (Required)"></textarea>
+			<textarea id="dashboard_new_special_description" ng-model="description" class="nestled" placeholder="Description (Optional)"></textarea>
+			<div class="button_wrapper nestled">
+				<button type="button" id="dashboard_new_special_clear" ng-click="item=null;description=null">Clear</button>
+				<input type="submit" id="dashboard_new_special_submit" ng-class="{'opaque':!item}" value="Submit!">
+			</div>
+		</form>
+	</div>
+<!-- SCRIBBLES -->
 	<h2>Chalkboard</h2>
 	<div id="scribbles">
-		<p ng-repeat="scribble in scribbles"><span class="scribble_username bold">{{scribble.username}}</span><span class="scribble_message"> | {{scribble.message}}</span><span class="scribble date"> [{{scribble.date}}]</span></p>
+		<p ng-repeat="scribble in scribbles"><span class="scribble_username bold">{{scribble.fullname}}</span><span class="scribble_message"> | {{scribble.message}}</span><span class="scribble date"> [{{scribble.date}}]</span></p>
 	</div>
-	<textarea id="chalkboard" ng-model="new_scribble" class="nestled"></textarea><div id="chalkboard_button_wrapper" class="nestled"><button id="chalkboard_clear">Clear</button><button id="chalkboard_submit" ng-click="chalkboard_submit(new_scribble)">Scribble!</button></div>
+	<form ng-submit="makeNewScribble(new_scribble);new_scribble=null">
+		<textarea id="scribble" ng-model="new_scribble" class="nestled"></textarea>
+		<div class="button_wrapper nestled">
+			<button type="button" id="scribble_clear" ng-click="new_scribble=null">Clear</button>
+			<input type="submit" id="scribble_submit" ng-class="{'opaque':!new_scribble}" value="Scribble!">
+		</div>
+	</form>
 </div>

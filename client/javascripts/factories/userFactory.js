@@ -7,10 +7,9 @@ munch.factory('UserFactory',function($http){
 	var registration_errors=[];
 	var registration_success={status:false};
 	var users=[];
-	var logged_in_user={username:''};
+	var logged_in_user={};
 	var account_type='';
 	var dashboard_messages=[];
-	//CHANGE THIS WITH DB
 	var dashboard_specials=[];
 	var scribbles=[];
 	var all_personnel=[];
@@ -67,6 +66,9 @@ munch.factory('UserFactory',function($http){
 			return {schedule:false,menu:true,tables:false,kitchen:false,tips:false,inventory:true,personnel:true,profile:true};
 		}
 	}
+
+//MESSAGES
+	//Retrieves all existing (and new) dashboard messages
 	factory.getDashboardMessages=function(callback){
 		$http.get('/getDashboardMessages.json').success(function(output){
 			dashboard_messages=output;
@@ -74,6 +76,20 @@ munch.factory('UserFactory',function($http){
 		});
 		return dashboard_messages;
 	}
+	//Creates new dashboard message in db and in factory
+	factory.makeNewDashboardMessage=function(new_message){
+		var d=new Date();
+		$http.post('/makeNewDashboardMessage.json',{message:new_message,username:logged_in_user.username,date:d}).success(function(output){
+			//Update the dashboard message list after adding new message to db
+			dashboard_messages.push(output);
+		});
+	}
+	factory.deleteDashboardMessage=function(message_id){
+		$http.post('/deleteDashboardMessage.json',{id:message_id});
+	}
+
+//SPECIALS
+	//Retrieves specials from db	
 	factory.getDashboardSpecials=function(callback){
 		$http.get('/getDashboardSpecials.json').success(function(output){
 			dashboard_specials=output;
@@ -81,26 +97,51 @@ munch.factory('UserFactory',function($http){
 		});
 		return dashboard_specials;
 	}
-	//Gets scribbles from db; no callback or return as auto-updates should be done through socket, not db saves
-	factory.getScribblesDB=function(){
-		$http.get('/getScribbles.json').success(function(output){
-			scribbles=output;
+	//Creates new special in db and in factory
+	factory.makeNewDashboardSpecial=function(item,description){
+		var d=new Date();
+		$http.post('/makeNewDashboardSpecial.json',{item:item,description:description,date:d}).success(function(output){
+			dashboard_specials.push(output);
 		});
 	}
-	//Returns scribbles from factory; the array does NOT get pushed to when new scribbles are submitted
-	//New scribbles get broadcasted in routes.js instead
-	factory.getScribbles=function(){
+	//Deletes special in db and factory
+	factory.deleteDashboardSpecial=function(special_id){
+		$http.post('/deleteDashboardSpecial.json',{id:special_id});
+		for(special in dashboard_specials){
+			if(dashboard_specials[special]['_id']==special_id){
+				dashboard_specials.splice(special,1);
+			}
+		}
+	}
+
+//SCRIBBLES
+	factory.getScribbles=function(callback){
+		$http.get('/getScribbles.json').success(function(output){
+			scribbles=output;
+			callback(scribbles);
+		});
 		return scribbles;
 	}
 	factory.makeNewScribble=function(new_scribble){
 		var d=new Date();
-		$http.post('/makeNewScribble.json',{username:logged_in_user.username,message:new_scribble,date:d.getHours()+':'+d.getMinutes()}).success(function(output){
-		});
+		var date=d.toDateString();
+		var hours=d.getHours();
+		var minutes=d.getMinutes();
+		var am_pm='am';
+		if(minutes<10){
+			minutes='0'+minutes;
+		}
+		if(hours>12){
+			hours-=12;
+			am_pm='pm';
+		}
+		$http.post('/makeNewScribble.json',{fullname:logged_in_user.firstname+' '+logged_in_user.lastname,message:new_scribble,date:hours+':'+minutes+am_pm+', '+date});
+			//Do NOT push to 'scribbles';
+			//pushing will make new scribbles by you appear above new scribbles from other users 
 	}
 
 	//PROFILE
 	factory.editProfile=function(user_new_info,password,callback){
-		console.log(user_new_info,password);
 		$http.post('/editProfile.json',[logged_in_user,password]).success(function(output){
 			logged_in_user=output;
 			callback(logged_in_user);
@@ -117,8 +158,10 @@ munch.factory('UserFactory',function($http){
 		return all_personnel;
 	}
 	factory.removePersonnel=function(personnel_employee){
-		$http.post('/removePersonnel.json',personnel_employee).success(function(output){
-		});
+		$http.post('/removePersonnel.json',personnel_employee);
+	}
+	factory.editPay=function(personnel_employee){
+		$http.post('/editPay.json',personnel_employee);
 	}
 	return factory;
 });

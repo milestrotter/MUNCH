@@ -9,6 +9,7 @@ var UserSchema = new mongoose.Schema({
 	phone: String,
 	password: String,
 	account_type: String,
+	pay: String,
 	date: {type: Date, default: d }
 });
 mongoose.model('User', UserSchema);

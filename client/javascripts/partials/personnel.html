@@ -1,12 +1,11 @@
 <div id="dashboard_main" class="nestled" ng-controller="Personnel">
-	<h1>WELCOME {{logged_in_user.username}}</h1>
-	<h2>Personnel</h2>
+	<h2>Personnel <span id="saved" class="neon_green">Saved!</span></h2>
 	<div id="personnel_employees_list">
 		<table ng-repeat="personnel_employee in personnel_employees">
 			<tbody>
 				<tr class="bold">
 					<td>Username:</td>
-					<td>{{personnel_employee.username}} <button class="sack" ng-click="personnel_dismiss(personnel_employee)" ng-show="logged_in_user.username!=personnel_employee.username">SACK</button></td>
+					<td>{{personnel_employee.username}} <button class="sack" ng-click="personnel_dismiss(personnel_employee)" ng-show="logged_in_user.username!=personnel_employee.username && personnel_employee.account_type=='personal'">SACK</button></td>
 				</tr>
 				<tr>
 					<td>First Name:</td>
@@ -27,6 +26,11 @@
 				<tr>
 					<td>Account Type:</td>
 					<td>{{personnel_employee.account_type}}</td>
+				</tr>
+				<tr ng-show="personnel_employee.account_type=='personal'">
+					<td>Pay:</td>
+					<td ng-hide="pay_editable"><span class="pay">{{personnel_employee.pay}}</span><button ng-click="pay_editable=true">Edit</button></td>
+					<td ng-show="pay_editable"><input type="text" ng-model="personnel_employee.pay"><button class="pay_save_button" ng-click="change_pay(personnel_employee);pay_editable=false">Save</button></td>
 				</tr>
 			</tbody>
 		</table>

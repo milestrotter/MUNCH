@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 mongoose.set('debug', true);
 var d=new Date();
 var ScribbleSchema = new mongoose.Schema({
-	username: String,
+	fullname: String,
 	message: String,
 	date: {type: String, default: d.getHours()+':'+d.getMinutes()}
 });

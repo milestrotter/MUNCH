@@ -81,23 +81,73 @@
                 })
         })
 
-    //MESSAGING
     var io = io.connect();
-    io.on('scribble_everyone',function(scribble_received){
-        console.log('got one!');
-		$('#scribbles').append('<p><span class="scribble_username bold">'+scribble_received.username+'</span><span class="scribble_message"> | '+scribble_received.message+'</span><span class="scribble date"> ['+scribble_received.date+']</span></p>');
+
+//MESSAGING
+    io.on('dashboard_message_everyone',function(new_dashboard_message_received){
+        $('#dashboard_messages').append('<li>'+new_dashboard_message_received.message+'</li>');
     });
-    $(document).on('click','#chalkboard_clear',function(){
-    	$('#chalkboard').val('');
+    io.on('dashboard_delete_message_everyone',function(message_to_delete){
+        $('#dashboard_messages li')[message_to_delete.delete_index].remove();
     });
-    $(document).on('click','#chalkboard_submit',function(){
-    	var d=new Date();
-    	if($('#chalkboard').val()){
-    		io.emit('chalkboard_submitted',{username:'<%= username %>',message:$('#chalkboard').val(),date:d.getHours()+':'+d.getMinutes()});
-    	}
+    $(document).on('click','#dashboard_new_message_clear',function(){
+        $('#dashboard_new_message').val('');
+    });
+    $(document).on('click','#dashboard_new_message_submit',function(){
+        io.emit('dashboard_message_submitted',{message:$('#dashboard_new_message').val()});
+    });
+    $(document).on('click','.dashboard_message_delete',function(){
+        io.emit('dashboard_delete_message',{delete_index:$(this).parent().attr('id')});
+        $(this).parent().remove();
     });
 
-    //NAVIGATION
+//SPECIALS
+    io.on('dashboard_special_everyone',function(new_dashboard_special_received){
+        var descr='';
+        if(new_dashboard_special_received.description.length!=0){
+            descr=': '+new_dashboard_special_received.description;
+        }
+        
+        $('#dashboard_specials').append('<li>'+new_dashboard_special_received.item+descr+'</li>');
+    });
+    io.on('dashboard_delete_special_everyone',function(special_to_delete){
+        $('#dashboard_specials li')[special_to_delete.delete_index].remove();
+    });
+    $(document).on('click','#dashboard_new_special_clear',function(){
+        $('#dashboard_new_special_item,#dashboard_new_special_description').val('');
+    });
+    $(document).on('click','#dashboard_new_special_submit',function(){
+        io.emit('dashboard_new_special_submitted',{item:$('#dashboard_new_special_item').val(),description:$('#dashboard_new_special_description').val()});
+    });
+    $(document).on('click','.dashboard_special_delete',function(){
+        io.emit('dashboard_delete_special',{delete_index:$(this).parent().attr('id')});
+        $(this).parent().remove();
+    });
+
+//SCRIBBLES
+    io.on('scribble_everyone',function(scribble_received){
+		$('#scribbles').append('<p><span class="scribble_username bold">'+scribble_received.fullname+'</span><span class="scribble_message"> | '+scribble_received.message+'</span><span class="scribble date"> ['+scribble_received.date+']</span></p>');
+    });
+    $(document).on('click','#scribble_clear',function(){
+    	$('#scribble').val('');
+    });
+    $(document).on('click','#scribble_submit',function(){
+    	var d=new Date();
+        var date=d.toDateString();
+        var hours=d.getHours();
+        var minutes=d.getMinutes();
+        var am_pm='am';
+        if(minutes<10){
+            minutes='0'+minutes;
+        }
+        if(hours>12){
+            hours-=12;
+            am_pm='pm';
+        }
+		io.emit('scribble_submitted',{fullname:'<%= fullname %>',message:$('#scribble').val(),date:hours+':'+minutes+am_pm+', '+date});
+    });
+
+//NAVIGATION
     $(document).ready(function(){
     	$('.dashboard_navbar_tab').css('opacity','0');
     	$('.dashboard_navbar_tab').animate({'opacity':'1'},1000);
@@ -119,34 +169,36 @@
             });
         });
         $(document).on('click','.dashboard_navbar_tab',function(){
+            $('#home,#logout').css('margin-top','3vh');
             $('#dashboard_partials').css('width','95%');
-        	$('#empty_box').hide();
-        	$('.dashboard_navbar_tab *').stop(true,true);
-    		$('#dashboard_navbar').css('top','90%');
-    		$('.dashboard_navbar_tab').find('h2').css('top','-97%');
+            $('#empty_box').hide();
+            $('.dashboard_navbar_tab *').stop(true,true);
+            $('#dashboard_navbar').css('top','90%');
+            $('.dashboard_navbar_tab').find('h2').css('top','-97%');
         });
         $(document).on('click','#home',function(){
+            $('#home,#logout').css('margin-top','89vh');
         	$('#empty_box').show();
-        	$('#dashboard_partials').css('width','500px');
+        	$('#dashboard_partials').css('width','48%');
         	$('.dashboard_navbar_tab').find('h2').css('top','-53%');
-        	$('#dashboard_navbar').css('top','40px');
+            $('#dashboard_navbar').css('top','');
+        	$('#dashboard_navbar').css('bottom','0em');
             io.emit('new_screen',{msg:'read to get existing messages'});
         });
 
-
-        //PROFILE PARTIAL jQUERY
+    //PROFILE PARTIAL jQUERY
         $(document).on('click','#profile_edit_button',function(){
         	$('#profile_table input:not(.static)').css('border','solid gray 1px');
 		});
-		$(document).on('click','#profile_save_button',function(){
+		$(document).on('click','#profile_save_button,.pay_save_button',function(){
         	$('#profile_table input').css('border','none');
-        	$('#profile_saved').show();
-        	$('#profile_saved').animate({'opacity':'0'},3000,function(){
-        		$('#profile_saved').hide();
+        	$('#saved').show();
+        	$('#saved').animate({'opacity':'0'},3000,function(){
+        		$('#saved').hide();
         	});
 		});
 
-		//PERSONNEL
+	//PERSONNEL
 		$(document).on('click','.sack',function(){
 			$(this).parent().parent().parent().parent().remove();
 		});
@@ -223,11 +275,10 @@
 				</ul>
 				<h2>PROFILE</h2>
 			</div>
-		</div>
-	</div>
-	<h2><a id="home" class="no_decoration" href="#">HOME</a></h2>
-    <!-- <h2>HOME</h2> -->
-	<h2><a id="logout" class="no_decoration" href="/">LOG OUT</a></h2>
+	       <a id="home" class="no_decoration nestled" href="#"><h2>HOME</h2></a>
+	       <a id="logout" class="no_decoration nestled" href="/"><h2>LOG OUT</h2></a>
+        </div>
+    </div>
 	<div id="empty_box" class="nestled"></div>
 	<div id="dashboard_partials" class="nestled wide">
         <!-- ng-view must be on its own, otherwise confuses jQuery styling -->

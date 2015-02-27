@@ -1,8 +1,8 @@
 	<div id="dashboard_main" class="nestled" ng-controller="Profile">
 		<h1>{{logged_in_user.username}}</h1>
-		<h2>Profile <span id="profile_saved" class="neon_green">Saved!</span></h2>
+		<h2>Profile <span id="saved" class="neon_green">Saved!</span></h2>
 		<button id="profile_edit_button" ng-click="input_clickable=true" ng-hide="input_clickable">Edit</button>
-		<button id="profile_save_button" ng-click="profile_save(logged_in_user._id,password);input_clickable=false" ng-show="input_clickable">Save</button>
+		<button id="profile_save_button" ng-click="profile_save(password);input_clickable=false" ng-show="input_clickable">Save</button>
 		<table id="profile_table">
 			<tbody>
 				<tr>

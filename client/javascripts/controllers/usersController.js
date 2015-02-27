@@ -31,27 +31,42 @@ munch.controller('schedules',function($scope, ScheduleFactory){
 	})
 });
 munch.controller('DashboardNavbar',function($scope,UserFactory){
-	UserFactory.getScribblesDB();
-	//loggedin user
 	UserFactory.getLoggedInUserDB(function(data){
 		$scope.logged_in_user=data;
 		$scope.navbar_show=UserFactory.getNavBar();
 	});
 });
 munch.controller('DashboardMessages',function($scope,UserFactory){
+//MESSAGES
 	UserFactory.getDashboardMessages(function(data){
 		$scope.dashboard_messages=data;
 	});
+	$scope.makeNewDashboardMessage=function(new_message){
+		UserFactory.makeNewDashboardMessage(new_message);
+	}
+	$scope.deleteDashboardMessage=function(message_id){
+		UserFactory.deleteDashboardMessage(message_id);
+	}
+//SPECIALS
 	UserFactory.getDashboardSpecials(function(data){
 		$scope.dashboard_specials=data;
 	});
-	$scope.scribbles=UserFactory.getScribbles();
-	$scope.chalkboard_submit=function(new_scribble){
+	$scope.makeNewDashboardSpecial=function(item,description){
+		UserFactory.makeNewDashboardSpecial(item,description);
+	}
+	$scope.deleteDashboardSpecial=function(special_id){
+		UserFactory.deleteDashboardSpecial(special_id);
+	}
+//SCRIBBLES
+	UserFactory.getScribbles(function(data){
+		$scope.scribbles=data;
+	});
+	$scope.makeNewScribble=function(new_scribble){
 		UserFactory.makeNewScribble(new_scribble);
 	}
 });
 munch.controller('Profile',function($scope,UserFactory){
-	$scope.profile_save=function(id,password){
+	$scope.profile_save=function(password){
 		UserFactory.editProfile($scope.logged_in_user,password,function(data){
 		});
 	}
@@ -65,5 +80,8 @@ munch.controller('Personnel',function($scope,UserFactory){
 	});
 	$scope.personnel_dismiss=function(personnel_employee){
 		UserFactory.removePersonnel(personnel_employee);
+	}
+	$scope.change_pay=function(personnel_employee){
+		UserFactory.editPay(personnel_employee);
 	}
 });
